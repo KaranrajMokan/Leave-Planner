@@ -1,0 +1,42 @@
+body{
+    background: rgba(242, 242, 242, 1);
+}
+
+.image-div{
+    position: absolute;
+    left: 0%;
+    right: 82.36%;
+    top: 0.49%;
+    bottom: 85.55%;
+    height: 155px;
+    width: 254px;
+    left: 0px;
+    top: 0px;
+    border-radius: 0px;
+
+}
+
+.line-div{
+    position: absolute;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25)), drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+    height: 0px;
+    width: 1440.0001220703125px;
+    top: 170px;
+    border-radius: 0px;
+    border: 1px solid #ffffff;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    
+}
+
+.inner-div{
+    height: 843px;
+    width: 1171px;
+    left: 136px;
+    top: 5.25px;
+    border-radius: 0px;
+    background: rgba(221, 232, 236, 1);
+    position: absolute;
+    left: 9.44%;
+    right: 9.44%;
+    bottom: 0%;
+}
