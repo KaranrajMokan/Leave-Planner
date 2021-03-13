@@ -17,4 +17,8 @@ public class StudentsDetailsService {
     public List<StudentsDetails> findAll(){
         return (List<StudentsDetails>) studentsDetailsRepository.findAll();
     }
+
+    public StudentsDetails findByRollNumber(String rollNumber){
+        return studentsDetailsRepository.findByRollNumber(rollNumber);
+    }
 }

@@ -3,14 +3,17 @@ package com.leave.controller;
 import com.leave.model.*;
 import com.leave.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
+
 
 @RestController
+@CrossOrigin(origins = "http://localhost:8080")
 public class Controller {
 
 	@Autowired
@@ -30,6 +33,8 @@ public class Controller {
 
 	@Autowired
 	LoginDetailsService loginDetailsService;
+
+	Logger logger = Logger.getLogger(Logger.class.getName());
 
 	@RequestMapping("/")
 	public String index() {
@@ -88,13 +93,24 @@ public class Controller {
 		return resultantString;
 	}
 
-	@GetMapping("/login-details")
-	public List<String> getLoginDetails(){
+
+	@PostMapping("/login-details")
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<StudentsDetails> getLoginDetails(@RequestBody LoginInformation loginInformation){
 		List<LoginDetails> loginDetailsList = loginDetailsService.findAll();
-		List<String> resultantString = new ArrayList<>();
+		String errorMessage = "Incorrect Roll number and Incorrect password";
 		for(LoginDetails loginDetail: loginDetailsList){
-			resultantString.add(loginDetail.toString());
+			if (loginDetail.getStudentsDetails().getRollNumber().equals(loginInformation.getRollno())){
+				if (loginDetail.getPassword().equals(loginInformation.getPassword())) {
+					StudentsDetails studentsDetails = studentsDetailsService.findByRollNumber(loginInformation.getRollno());
+					logger.info("Login is successful");
+					return ResponseEntity.status(HttpStatus.OK).header("Message","Login is successful").body(studentsDetails);
+				}
+				else
+					errorMessage = "Incorrect Password";
+			}
 		}
-		return resultantString;
+		logger.info(errorMessage);
+		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).header("Message",errorMessage).body(null);
 	}
 }

@@ -10,10 +10,10 @@ class Login extends Component{
             method:'post',
             url:'http://localhost:8080/login-details',
             data: cred
-        }).then(response=>{
+        }).then(response=> {
             console.log(response.data);
             this.props.history.push({
-                pathname:"/homepage",
+                pathname:"/planning-dashboard",
                 state:{ detail:response.data }
             });
         }).catch(error => {
@@ -25,11 +25,11 @@ class Login extends Component{
     onSubmit(e)
     {
         const List = {
-            rollno: this.refs.rollno.value,
+            rollno: this.refs.rollno.value.toUpperCase(),
             password: this.refs.password.value
         }
         console.log(List);
-        //this.logIn(List);
+        this.logIn(List);
         e.preventDefault();
     }
 
