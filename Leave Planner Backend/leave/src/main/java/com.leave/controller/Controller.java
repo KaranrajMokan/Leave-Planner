@@ -1,8 +1,12 @@
 package com.leave.controller;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTCreationException;
 import com.leave.model.*;
 import com.leave.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,6 +39,9 @@ public class Controller {
 	LoginDetailsService loginDetailsService;
 
 	Logger logger = Logger.getLogger(Logger.class.getName());
+
+	@Value("{JWT_SECRET}")
+	String secret;
 
 	@RequestMapping("/")
 	public String index() {
@@ -104,7 +111,14 @@ public class Controller {
 				if (loginDetail.getPassword().equals(loginInformation.getPassword())) {
 					StudentsDetails studentsDetails = studentsDetailsService.findByRollNumber(loginInformation.getRollno());
 					logger.info("Login is successful");
-					return ResponseEntity.status(HttpStatus.OK).header("Message","Login is successful").body(studentsDetails);
+					try {
+						Algorithm algorithm = Algorithm.HMAC256(secret);
+						String token = JWT.create().withIssuer(studentsDetails.getRollNumber()).sign(algorithm);
+						studentsDetails.setStudentToken(token);
+						return ResponseEntity.status(HttpStatus.OK).header("Message","Login is successful").body(studentsDetails);
+					} catch (JWTCreationException exception){
+						logger.info("Error creating JWT tokens");
+					}
 				}
 				else
 					errorMessage = "Incorrect Password";

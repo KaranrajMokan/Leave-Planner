@@ -1,0 +1,112 @@
+
+.rectangle{
+    position: absolute;
+    left: 4.87%;
+    right: 62.17%;
+    top: 6.05%;
+    bottom: 6.05%;
+    background: #F2F0F0;
+    border: 3px solid #DDE8EC;
+}
+
+.texts{
+    font-family: 'Archivo';
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px;
+    letter-spacing: 0em;
+    text-align: left;
+    padding-left: 6%;
+    color: #303334;
+}
+
+.size1{
+    font-size: 22px;
+}
+
+.size2{
+    font-size: 20px;
+}
+
+.lines-new{
+    border: 2px solid rgba(229, 229, 229, 1);
+    position: relative;
+    left: 0%;
+    right: 0%;
+    top: 3%;
+}
+
+.div1{
+    padding-top: 6%;
+}
+
+.div2{
+    padding-top: 12%;
+}
+
+.div3{
+    padding-top: 1%;
+}
+
+.div4{
+    padding-top: 20%;;
+}
+
+.div5{
+    padding-top: 16%;
+    font-size: 16px;
+}
+
+.div6{
+    padding-top: 25%;
+}
+
+.red-color{
+    color: #E42424;;
+}
+
+.boxes{
+    position: absolute;
+    height: 47px;
+    width: 330px;
+    margin-top: 2.5%;
+    margin-left: 5.5%;
+    color: #F7F3F3;
+    background: #F7F3F3;
+    border: 3px solid #E5E5E5;
+}
+
+.dropdown-texts{
+    font-family: 'Archivo';
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: #303334;
+    font-size: 18px;
+}
+
+.button1{
+    position: absolute;
+    font-size: 20px;
+    bottom: 9%;
+    left: 6%;
+    height: 60px;
+    width: 110px;
+    border-radius: 0px;
+    background: #F7F3F3;
+    border: 3px solid #E5E5E5;
+}
+
+.button2{
+    position: absolute;
+    font-size: 20px;
+    bottom: 9%;
+    right: 8%;
+    height: 60px;
+    width: 180px;
+    background: rgba(177, 219, 234, 1);
+    border: 3px solid #DDE8EC;
+
+}

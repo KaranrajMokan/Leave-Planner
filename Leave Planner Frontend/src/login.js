@@ -11,7 +11,12 @@ class Login extends Component{
             url:'http://localhost:8080/login-details',
             data: cred
         }).then(response=> {
-            console.log(response.data);
+            const studentToken = {
+                name : response.data.name,
+                token : response.data.studentToken,
+                expiry : new Date().getTime() + 300000,
+            }
+            localStorage.setItem('studentToken', JSON.stringify(studentToken));
             this.props.history.push({
                 pathname:"/planning-dashboard",
                 state:{ detail:response.data }

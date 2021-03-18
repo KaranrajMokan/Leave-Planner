@@ -1,0 +1,15 @@
+.nav-bar-texts{
+    position: absolute;
+    top:15%;
+    left: 220px;
+    font-family: Archivo;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 22px;
+    line-height: 24px;
+    color: #303334;
+}
+
+.nav-bar-style{
+    padding-left: 50px;
+}

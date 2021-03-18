@@ -28,6 +28,8 @@ public class StudentsDetails {
     @Column(name="class_id")
     private String classId;
 
+    private String studentToken;
+
     public StudentsDetails(){
 
     }
