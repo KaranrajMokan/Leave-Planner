@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.leave.model.*;
+import com.leave.repository.LeaveDetailsRepository;
 import com.leave.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,7 +34,7 @@ public class Controller {
 	CourseDetailsService courseDetailsService;
 
 	@Autowired
-	LeaveDetailsService leaveDetailsService;
+	LeaveDetailsRepository leaveDetailsRepository;
 
 	@Autowired
 	LoginDetailsService loginDetailsService;
@@ -90,14 +91,20 @@ public class Controller {
 		return resultantString;
 	}
 
-	@GetMapping("/leave-details")
-	public List<String> getLeaveDetails(){
-		List<LeaveDetails> leaveDetailsList = leaveDetailsService.findAll();
-		List<String> resultantString = new ArrayList<>();
-		for(LeaveDetails leaveDetail: leaveDetailsList){
-			resultantString.add(leaveDetail.toString());
-		}
-		return resultantString;
+	@PostMapping("/leave-details")
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<String> postLeaveDetails(@RequestBody LeaveInformation leaveInformation){
+		LeaveDetails leaveDetails = new LeaveDetails();
+		StudentsDetails studentsDetails = studentsDetailsService.findByRollNumber(leaveInformation.getRollNumber());
+		leaveDetails.setLeaveId("0");
+		leaveDetails.setStudentsDetails(studentsDetails);
+		leaveDetails.setLeaveStartDate(leaveInformation.getStartDate());
+		leaveDetails.setLeaveEndDate(leaveInformation.getEndDate());
+		leaveDetails.setLeaveType(leaveInformation.getLeaveType());
+		leaveDetails.setLeaveDuration(0);
+		leaveDetailsRepository.save(leaveDetails);
+		logger.info("Leave is planned successfully");
+		return ResponseEntity.status(HttpStatus.OK).body("");
 	}
 
 

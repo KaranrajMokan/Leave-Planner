@@ -467,12 +467,12 @@ insert into Course_details(rollno,course_id) values ('17PW40','15XWAF');
 
 
 create table Leave_details(
-	leave_id varchar(10),
+	leave_id varchar(25),
 	rollno varchar(6),
-	leave_startDate Date,
-	leave_endDate Date,
+	leave_start_date Date,
+	leave_end_date Date,
 	leave_duration int,
-	leave_type varchar(10),
+	leave_type varchar(25),
 	PRIMARY KEY(leave_id),
 	FOREIGN KEY(rollno) REFERENCES Students_details(rollno)
 );

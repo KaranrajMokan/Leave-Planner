@@ -21,10 +21,10 @@ public class LeaveDetails {
     @JoinColumn(name="rollno")
     private StudentsDetails studentsDetails;
 
-    @Column(name="leave_startDate")
+    @Column(name="leave_start_date")
     private LocalDate leaveStartDate;
 
-    @Column(name="leave_endDate")
+    @Column(name="leave_end_date")
     private LocalDate leaveEndDate;
 
     @Column(name="leave_duration")

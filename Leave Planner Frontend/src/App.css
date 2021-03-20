@@ -21,3 +21,20 @@
     letter-spacing: 0em;
     text-align: left;
 }
+
+.app-lines{
+    position: absolute;
+    top: 20%;
+    right: 6%;
+    width: 224px;
+    height: 0px;
+    height: 0px;
+    width: 224px;
+    left: 201px;
+    border: 2px solid #ACD7FF;
+    border-radius: 0px;
+}
+
+.change-speed{
+    left: 29%;
+}
