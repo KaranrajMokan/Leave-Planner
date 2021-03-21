@@ -2,52 +2,20 @@ import { Component } from 'react';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import { BrowserRouter as Switch, Route} from "react-router-dom";
-import logo from './images/LP-logo.png';
+import { withRouter } from 'react-router';
 import Login from './login';
 import PlanningDashboard from './planning-dasboard';
 import LeavesDashboard from './leaves-dashboard';
-import NavBar from './components/nav-bar';
-import { withRouter } from 'react-router';
 
-var isLoggedIn;
-var navbar;
-var logout;
-var name;
-var lines;
+import Toast from './components/toast';
+import checkIcon from './images/check_icon.png';
+import errorIcon from './images/error_icon.png';
+
 class App extends Component {
 
-  constructor() {
-    super();
-    this.state = {
-       clicked: "Planning"
-    }
-    this.myCallBack = this.myCallBack.bind(this);
-    this.getWithExpiry = this.getWithExpiry.bind(this);
-    this.logoutFunction = this.logoutFunction.bind(this);
-  };
-
-  componentWillMount(){
-    if (this.getWithExpiry()){
-      navbar = <NavBar callBackFromParent={this.myCallBack}/>;
-      logout = <button className="logout-but end-texts" onClick={this.logoutFunction}>LOGOUT</button>;
-      const halfName = "Hello, "+JSON.parse(localStorage.getItem("studentToken")).name;
-      name = <div className="positions end-texts">{halfName}</div>;
-    }
-    else{
-      navbar = '';
-      logout = '';
-      name = '';
-      lines = '';
-    }
-  };
-
-  myCallBack = (dataFromChild) => {
-    this.setState({ clicked: dataFromChild});
-    console.log(dataFromChild);
-  };
-
-  getWithExpiry(){
+  checkForExpiry(){
     const itemStr = localStorage.getItem("studentToken")
+    var isLoggedIn;
     if(!itemStr){
       isLoggedIn = false;
     }
@@ -66,37 +34,23 @@ class App extends Component {
     return isLoggedIn;
   };
 
-  logoutFunction(){
-    localStorage.clear();
-    isLoggedIn = false;
-    window.location.href = '/';
-  };
-
   render() {
-    if(isLoggedIn){
-      if(this.state.clicked === "Planning"){
-        console.log("yes");
-        lines = <div className="app-lines"></div>;
-      }
-      else if (this.state.clicked === "Leaves"){
-        console.log("no");
-        lines = <div className="app-lines change-speed"></div>;
-      }
-    }
+    this.checkForExpiry();
+    const testList =
+    {
+        title: 'Success',
+        description: 'This is a success toast component',
+        backgroundColor: '#5cb85c',
+        icon: checkIcon
+      };
     return (
       <div>
-        <img className="image-div" src={logo} alt=""></img>
-        {lines}
-        <div>{navbar}{name}{logout}</div>
-        <div className="line-div">
-          <div className="inner-div">
           <Switch>
             <Route path="/" exact render={props=><Login {...props}/>}/>
             <Route path="/planning-dashboard" exact render={props=><PlanningDashboard {...props}/>}/>
             <Route path="/leaves-dashboard" exact render={props=><LeavesDashboard {...props}/>}/>
-          </Switch>
-          </div>
-        </div>
+          </Switch> 
+          {/* <Toast toast={testList}/> */}
       </div>);
   }
 

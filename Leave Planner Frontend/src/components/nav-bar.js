@@ -2,6 +2,7 @@ import { Component } from 'react';
 import './nav-bar.css';
 
 class NavBar extends Component{
+    
     /*constructor() {
         super();
         this.state = {
@@ -14,14 +15,11 @@ class NavBar extends Component{
         return(
             <div>
                 <div className="nav-bar-texts">
-                    <span onClick= {() => { this.props.callBackFromParent('Planning');
-                            window.location.href = '/planning-dashboard';}}>
+                    <span onClick= {() => { window.location.href = '/planning-dashboard';}}>
                     Planning Dashboard</span>
-                    <span className="nav-bar-style" onClick= {() => { this.props.callBackFromParent('Leaves');
-                            //window.location.href = '/leaves-dashboard';}}>
-                    }}>
-                    Leaves Dashboard
-                    </span>
+                    <span className="nav-bar-style" onClick= {() => {
+                        window.location.href = '/leaves-dashboard';}}>
+                    Leaves Dashboard</span>
                 </div>
             </div>
         );

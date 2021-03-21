@@ -1,0 +1,61 @@
+.notification-container{
+    position:absolute;
+    top: 2%;
+    left: 40%;
+    height: 75px;
+    width : 350px;
+    border-radius: 5%;
+    border: 2px solid black;
+    font-family:fantasy;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 22px;
+    letter-spacing: 0em;
+    color: #000000;
+}
+
+.img-division{
+    padding-left: 5%;
+    padding-top: 3.5%;
+}
+
+.button-division{
+    position: relative;
+    padding-left: 93%;
+    bottom: 70%;
+    border: none;
+    background: none;
+    color: #FFFFFF;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 20px;
+    font-weight: 2000;
+}
+
+.notification-title{
+    position: absolute;
+    top: 25%;
+    left: 25%;
+    font-size: 25px;
+}
+
+.notification-message{
+    position: absolute;
+    top: 60%;
+    left: 25%;
+    font-size: 15px;
+}
+
+.anime {
+	transition: transform .6s ease-in-out;
+	animation: toast-in-right .7s;
+}
+
+@keyframes toast-in-right {
+	from {
+	  transform: translateY(0);
+	  
+	}
+	to {
+	  transform: translateY(100%);
+	}
+}
