@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -38,6 +39,9 @@ public class Controller {
 
 	@Autowired
 	LoginDetailsService loginDetailsService;
+
+	@Autowired
+	LeaveDetailsService leaveDetailsService;
 
 	Logger logger = Logger.getLogger(Logger.class.getName());
 
@@ -96,7 +100,18 @@ public class Controller {
 	public ResponseEntity<String> postLeaveDetails(@RequestBody LeaveInformation leaveInformation){
 		LeaveDetails leaveDetails = new LeaveDetails();
 		StudentsDetails studentsDetails = studentsDetailsService.findByRollNumber(leaveInformation.getRollNumber());
-		leaveDetails.setLeaveId("0");
+
+		String leaveId;
+		List<LeaveDetails> leaveDetailsList = leaveDetailsService.findAll();
+		if (leaveDetailsList.size()==0){
+			leaveId="0";
+		}
+		else{
+			long leavesId = Long.parseLong(leaveDetailsList.stream().max(Comparator.comparing(LeaveDetails::getLeaveId)).get().getLeaveId());
+			leaveId = String.valueOf(leavesId+1);
+		}
+
+		leaveDetails.setLeaveId(leaveId);
 		leaveDetails.setStudentsDetails(studentsDetails);
 		leaveDetails.setLeaveStartDate(leaveInformation.getStartDate());
 		leaveDetails.setLeaveEndDate(leaveInformation.getEndDate());
@@ -113,10 +128,11 @@ public class Controller {
 	public ResponseEntity<StudentsDetails> getLoginDetails(@RequestBody LoginInformation loginInformation){
 		List<LoginDetails> loginDetailsList = loginDetailsService.findAll();
 		String errorMessage = "Incorrect Roll number and Incorrect password";
+		StudentsDetails studentsDetails = new StudentsDetails();
 		for(LoginDetails loginDetail: loginDetailsList){
 			if (loginDetail.getStudentsDetails().getRollNumber().equals(loginInformation.getRollno())){
 				if (loginDetail.getPassword().equals(loginInformation.getPassword())) {
-					StudentsDetails studentsDetails = studentsDetailsService.findByRollNumber(loginInformation.getRollno());
+					studentsDetails = studentsDetailsService.findByRollNumber(loginInformation.getRollno());
 					logger.info("Login is successful");
 					try {
 						Algorithm algorithm = Algorithm.HMAC256(secret);
@@ -132,6 +148,7 @@ public class Controller {
 			}
 		}
 		logger.info(errorMessage);
-		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).header("Message",errorMessage).body(null);
+		studentsDetails.setStudentToken(errorMessage);
+		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).header("Message",errorMessage).body(studentsDetails);
 	}
 }

@@ -3,8 +3,22 @@ import './login.css';
 import axios from 'axios';
 import logo from './images/LP-logo.png';
 
+import Toast from './components/toast';
+//import checkIcon from './images/check_icon.png';
+import errorIcon from './images/error_icon.png';
 
+var toastMessage="";
+var toaster;
 class Login extends Component{
+
+    constructor(){
+        super();
+        this.state={
+            value : true,
+            errorMessage : ''
+        }
+    }
+
 
     logIn(cred)
     {
@@ -13,7 +27,7 @@ class Login extends Component{
             url:'http://localhost:8080/login-details',
             data: cred
         }).then(response=> {
-            console.log(response.data);
+            this.setState({value:true});
             const studentToken = {
                 rollNumber : response.data.rollNumber,
                 name : response.data.name,
@@ -26,8 +40,8 @@ class Login extends Component{
                 state:{ detail:response.data }
             });
         }).catch(error => {
-            console.log(error.response)
-            return false;
+            this.setState({ value:false });
+            this.setState({ errorMessage:error.response.data.studentToken });
         });
     }
 
@@ -38,15 +52,26 @@ class Login extends Component{
             rollno: this.refs.rollno.value.toUpperCase(),
             password: this.refs.password.value
         }
-        console.log(List);
         this.logIn(List);
         e.preventDefault();
     }
 
     render(){
-        
+        if(!this.state.value){
+            if(this.state.errorMessage === "Incorrect Password" || this.state.errorMessage === "Incorrect Roll number and Incorrect password"){
+                toastMessage =
+                {
+                    title: 'Failure',
+                    description: this.state.errorMessage,
+                    backgroundColor: '#d9534f',
+                    icon: errorIcon
+                };
+                toaster = <Toast toast={toastMessage} page="login"/>;
+            }
+        }
         return(
             <div>
+                {toaster}
                 <img className="image-div" src={logo} alt=""></img>
                 <div className="line-div">
                     <div className="inner-div">

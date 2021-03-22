@@ -6,23 +6,31 @@ import Logo from './images/LP-logo.png';
 import NavBar from './components/nav-bar';
 
 import Select from 'react-select';
+import Toast from './components/toast';
+import checkIcon from './images/check_icon.png';
+
 //import DatePicker from "react-datepicker";
 //import { FontAwesome } from 'react-fontawesome';
 
 var rollNumber;
 var name;
+var toastMessage="";
+var toaster;
 class PlanningDashboard extends Component{
 
     constructor(props){
         super(props);
         this.state ={
-            leaveType: ''
+            leaveType: '',
+            isPlanned: false,
+            endDateLimit : new Date().toISOString().split('T')[0]
         };
         this.onSubmit = this.onSubmit.bind(this);
         this.planLeavesFunction = this.planLeavesFunction.bind(this);
         this.getDropDownValue = this.getDropDownValue.bind(this);
         this.resetForm = this.resetForm.bind(this);
         this.logoutFunction = this.logoutFunction.bind(this);
+        this.setEndLimit = this.setEndLimit.bind(this);
     }
 
     planLeavesFunction(leavesList){
@@ -45,8 +53,11 @@ class PlanningDashboard extends Component{
             endDate : this.refs.endDate.value,
             emailId : this.refs.email.value
         };
-        this.planLeavesFunction(leaveDetails);
-        this.resetForm();
+        if (leaveDetails.leaveType !== '' && leaveDetails.startDate !== '' && leaveDetails.endDate !== '' && leaveDetails.emailId !== ''){
+            this.planLeavesFunction(leaveDetails);
+            this.resetForm();
+            this.setState({isPlanned:true});
+        }
         e.preventDefault();
     }
 
@@ -62,7 +73,11 @@ class PlanningDashboard extends Component{
     logoutFunction(){
         localStorage.clear();
         window.location.href = '/';
-      };
+    }
+
+    setEndLimit(){
+        this.setState({endDateLimit: document.getElementById("startDate").value});
+    }
 
     render(){
         const {leaveType} = this.state;
@@ -74,8 +89,20 @@ class PlanningDashboard extends Component{
         name = JSON.parse(localStorage.getItem("studentToken")).name;
         const halfName = "Hello, "+name;
         const displayName = <div className="positions end-texts">{halfName}</div>;
+
+        if(this.state.isPlanned){
+            toastMessage =
+            {
+                title: 'Success',
+                description: 'Leave is planned successfully',
+                backgroundColor: '#5cb85c',
+                icon: checkIcon
+            };
+            toaster = <Toast toast={toastMessage} page="planning-dashboard"/>;
+        }
         return(
             <div>
+                {toaster}
                 <img className="image-div" src={Logo} alt=""></img>
                 <div className="app-lines"></div>
                 <div><NavBar />{displayName}<button className="logout-but end-texts" onClick={this.logoutFunction}>LOGOUT</button></div>
@@ -90,9 +117,9 @@ class PlanningDashboard extends Component{
                                 <div className="texts size2 div1">Leave type &nbsp;<span className="red-color">*</span></div>
                                 <Select className="boxes dropdown-texts" options={leaves} onChange={this.getDropDownValue} value={leaveType} placeholder="Select a leave type"/>
                                 <div className="texts size2 div1">Start Date&nbsp;<span className="red-color">*</span></div>
-                                <div className="boxes"><input type="date" className="form-control" ref="startDate"/></div>
+                                <div className="boxes"><input type="date" id="startDate" min={new Date().toISOString().split('T')[0]} onChange={this.setEndLimit} className="form-control" ref="startDate"/></div>
                                 <div className="texts size2 div4">End Date&nbsp;<span className="red-color">*</span></div>
-                                <div className="boxes"><input type="date" className="form-control" ref="endDate"/></div>
+                                <div className="boxes"><input type="date" min={this.state.endDateLimit} className="form-control" ref="endDate"/></div>
                                 <div className="texts size2 div4">Send leave notifications to &nbsp;<span className="red-color">*</span></div>
                                 <div className="boxes"><input type="text" className="form-control" ref="email"/></div>
                                 <p className="texts div5">Use comma seperated values (not spaces)</p>

@@ -6,13 +6,17 @@ class Toast extends Component{
     constructor(props){
         super(props);
         this.state = {
-            toast : this.props.toast
+            toast : this.props.toast,
+            page : this.props.page
         };
         this.destructMe = this.destructMe.bind(this);
     }
 
     destructMe(){
-        window.location.href = '/';
+        if (this.state.page === "login")
+            window.location.href = '/';
+        else if (this.state.page === "planning-dashboard")
+            window.location.href = '/planning-dashboard';
     }
 
     render(){

@@ -7,9 +7,6 @@ import Login from './login';
 import PlanningDashboard from './planning-dasboard';
 import LeavesDashboard from './leaves-dashboard';
 
-import Toast from './components/toast';
-import checkIcon from './images/check_icon.png';
-import errorIcon from './images/error_icon.png';
 
 class App extends Component {
 
@@ -36,13 +33,6 @@ class App extends Component {
 
   render() {
     this.checkForExpiry();
-    const testList =
-    {
-        title: 'Success',
-        description: 'This is a success toast component',
-        backgroundColor: '#5cb85c',
-        icon: checkIcon
-      };
     return (
       <div>
           <Switch>
@@ -50,7 +40,6 @@ class App extends Component {
             <Route path="/planning-dashboard" exact render={props=><PlanningDashboard {...props}/>}/>
             <Route path="/leaves-dashboard" exact render={props=><LeavesDashboard {...props}/>}/>
           </Switch> 
-          {/* <Toast toast={testList}/> */}
       </div>);
   }
 
