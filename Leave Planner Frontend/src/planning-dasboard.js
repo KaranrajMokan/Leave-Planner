@@ -8,6 +8,7 @@ import NavBar from './components/nav-bar';
 import Select from 'react-select';
 import Toast from './components/toast';
 import checkIcon from './images/check_icon.png';
+import errorIcon from './images/error_icon.png';
 
 //import DatePicker from "react-datepicker";
 //import { FontAwesome } from 'react-fontawesome';
@@ -23,7 +24,8 @@ class PlanningDashboard extends Component{
         this.state ={
             leaveType: '',
             isPlanned: false,
-            endDateLimit : new Date().toISOString().split('T')[0]
+            endDateLimit : new Date().toISOString().split('T')[0],
+            leaveMessage: ''
         };
         this.onSubmit = this.onSubmit.bind(this);
         this.planLeavesFunction = this.planLeavesFunction.bind(this);
@@ -51,12 +53,16 @@ class PlanningDashboard extends Component{
             leaveType : this.state.leaveType.value,
             startDate : this.refs.startDate.value,
             endDate : this.refs.endDate.value,
-            emailId : this.refs.email.value
+            emailId : this.refs.email.value,
+            studentToken : JSON.parse(localStorage.getItem("studentToken")).token
         };
         if (leaveDetails.leaveType !== '' && leaveDetails.startDate !== '' && leaveDetails.endDate !== '' && leaveDetails.emailId !== ''){
             this.planLeavesFunction(leaveDetails);
             this.resetForm();
             this.setState({isPlanned:true});
+        }
+        else {
+            this.setState({leaveMessage:"Missing inputs"});
         }
         e.preventDefault();
     }
@@ -68,6 +74,7 @@ class PlanningDashboard extends Component{
     resetForm(){
         document.getElementById("planning-tab").reset();
         this.setState({leaveType:''});
+        this.setState({endDateLimit: new Date().toISOString().split('T')[0]});
     }
 
     logoutFunction(){
@@ -89,16 +96,27 @@ class PlanningDashboard extends Component{
         name = JSON.parse(localStorage.getItem("studentToken")).name;
         const halfName = "Hello, "+name;
         const displayName = <div className="positions end-texts">{halfName}</div>;
-
-        if(this.state.isPlanned){
-            toastMessage =
-            {
-                title: 'Success',
-                description: 'Leave is planned successfully',
-                backgroundColor: '#5cb85c',
-                icon: checkIcon
-            };
-            toaster = <Toast toast={toastMessage} page="planning-dashboard"/>;
+        if(this.state.isPlanned) {
+                toastMessage =
+                {
+                    title: 'Success',
+                    description: 'Leave is planned successfully',
+                    backgroundColor: '#5cb85c',
+                    icon: checkIcon
+                };
+                toaster = <Toast toast={toastMessage} page="planning-dashboard"/>;
+        }
+        else{
+            if (this.state.leaveMessage !== ""){
+                toastMessage =
+                {
+                    title: 'Failure',
+                    description: "Missing inputs",
+                    backgroundColor: '#d9534f',
+                    icon: errorIcon
+                };  
+                toaster = <Toast toast={toastMessage} page="planning-dashboard"/>;
+            }
         }
         return(
             <div>
@@ -123,7 +141,7 @@ class PlanningDashboard extends Component{
                                 <div className="texts size2 div4">Send leave notifications to &nbsp;<span className="red-color">*</span></div>
                                 <div className="boxes"><input type="text" className="form-control" ref="email"/></div>
                                 <p className="texts div5">Use comma seperated values (not spaces)</p>
-                                <button className="button1" onClick={this.resetForm}>Reset</button> 
+                                <button type="button"className="button1" onClick={this.resetForm}>Reset</button> 
                                 <button type="submit" className="button2">Add to Plan</button>
                             </form>
                             <p className="texts div6"><span className="red-color">*</span>Mandatory</p>

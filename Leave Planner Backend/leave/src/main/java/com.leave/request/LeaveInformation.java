@@ -1,4 +1,4 @@
-package com.leave.model;
+package com.leave.request;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -13,4 +13,5 @@ public class LeaveInformation {
     LocalDate startDate;
     LocalDate endDate;
     String emailId;
+    String studentToken;
 }

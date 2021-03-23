@@ -15,8 +15,9 @@ class Toast extends Component{
     destructMe(){
         if (this.state.page === "login")
             window.location.href = '/';
-        else if (this.state.page === "planning-dashboard")
+        else if (this.state.page === "planning-dashboard"){
             window.location.href = '/planning-dashboard';
+        }
     }
 
     render(){

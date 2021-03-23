@@ -11,5 +11,10 @@
 }
 
 .nav-bar-style{
-    padding-left: 50px;
+    padding-left: 70px;
+}
+
+.empty-button{
+    border: none;
+    background: none;
 }

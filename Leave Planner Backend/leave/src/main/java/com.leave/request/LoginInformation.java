@@ -1,4 +1,4 @@
-package com.leave.model;
+package com.leave.request;
 
 import lombok.Getter;
 import lombok.Setter;

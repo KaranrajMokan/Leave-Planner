@@ -58,7 +58,7 @@ class Login extends Component{
 
     render(){
         if(!this.state.value){
-            if(this.state.errorMessage === "Incorrect Password" || this.state.errorMessage === "Incorrect Roll number and Incorrect password"){
+            if(this.state.errorMessage !== ""){
                 toastMessage =
                 {
                     title: 'Failure',

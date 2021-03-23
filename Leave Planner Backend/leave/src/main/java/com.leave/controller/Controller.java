@@ -1,10 +1,11 @@
 package com.leave.controller;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.exceptions.JWTCreationException;
+import com.leave.config.JwtCreator;
+import com.leave.config.JwtVerifier;
 import com.leave.model.*;
 import com.leave.repository.LeaveDetailsRepository;
+import com.leave.request.LeaveInformation;
+import com.leave.request.LoginInformation;
 import com.leave.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -44,8 +45,10 @@ public class Controller {
 	LeaveDetailsService leaveDetailsService;
 
 	Logger logger = Logger.getLogger(Logger.class.getName());
+	JwtVerifier jwtVerifier = new JwtVerifier();
+	JwtCreator jwtCreator = new JwtCreator();
 
-	@Value("{JWT_SECRET}")
+	@Value("${JWT_SECRET}")
 	String secret;
 
 	@RequestMapping("/")
@@ -98,9 +101,11 @@ public class Controller {
 	@PostMapping("/leave-details")
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<String> postLeaveDetails(@RequestBody LeaveInformation leaveInformation){
+		String rollNumber = leaveInformation.getRollNumber();
+		String token = leaveInformation.getStudentToken();
 		LeaveDetails leaveDetails = new LeaveDetails();
-		StudentsDetails studentsDetails = studentsDetailsService.findByRollNumber(leaveInformation.getRollNumber());
-
+		StudentsDetails studentsDetails = studentsDetailsService.findByRollNumber(rollNumber);
+		jwtVerifier.verifier(secret, rollNumber,token);
 		String leaveId;
 		List<LeaveDetails> leaveDetailsList = leaveDetailsService.findAll();
 		if (leaveDetailsList.size()==0){
@@ -127,24 +132,20 @@ public class Controller {
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<StudentsDetails> getLoginDetails(@RequestBody LoginInformation loginInformation){
 		List<LoginDetails> loginDetailsList = loginDetailsService.findAll();
-		String errorMessage = "Incorrect Roll number and Incorrect password";
+		String errorMessage = "Incorrect roll number & password";
 		StudentsDetails studentsDetails = new StudentsDetails();
 		for(LoginDetails loginDetail: loginDetailsList){
 			if (loginDetail.getStudentsDetails().getRollNumber().equals(loginInformation.getRollno())){
 				if (loginDetail.getPassword().equals(loginInformation.getPassword())) {
-					studentsDetails = studentsDetailsService.findByRollNumber(loginInformation.getRollno());
+					String rollNumber = loginInformation.getRollno();
+					studentsDetails = studentsDetailsService.findByRollNumber(rollNumber);
+					String token = jwtCreator.creator(secret,rollNumber);
+					studentsDetails.setStudentToken(token);
 					logger.info("Login is successful");
-					try {
-						Algorithm algorithm = Algorithm.HMAC256(secret);
-						String token = JWT.create().withIssuer(studentsDetails.getRollNumber()).sign(algorithm);
-						studentsDetails.setStudentToken(token);
-						return ResponseEntity.status(HttpStatus.OK).header("Message","Login is successful").body(studentsDetails);
-					} catch (JWTCreationException exception){
-						logger.info("Error creating JWT tokens");
-					}
+					return ResponseEntity.status(HttpStatus.OK).header("Message","Login is successful").body(studentsDetails);
 				}
 				else
-					errorMessage = "Incorrect Password";
+					errorMessage = "Incorrect password";
 			}
 		}
 		logger.info(errorMessage);
