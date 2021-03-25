@@ -2,6 +2,7 @@ package com.leave.controller;
 
 import com.leave.config.JwtCreator;
 import com.leave.config.JwtVerifier;
+import com.leave.config.Utils;
 import com.leave.model.*;
 import com.leave.repository.LeaveDetailsRepository;
 import com.leave.request.LeaveInformation;
@@ -13,8 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -106,25 +107,41 @@ public class Controller {
 		LeaveDetails leaveDetails = new LeaveDetails();
 		StudentsDetails studentsDetails = studentsDetailsService.findByRollNumber(rollNumber);
 		jwtVerifier.verifier(secret, rollNumber,token);
-		String leaveId;
-		List<LeaveDetails> leaveDetailsList = leaveDetailsService.findAll();
-		if (leaveDetailsList.size()==0){
-			leaveId="0";
+		String leaveId,message;
+		LocalDate startDate = leaveInformation.getStartDate();
+		LocalDate endDate = leaveInformation.getEndDate();
+ 		int duration = Utils.calculateDuration(startDate,endDate);
+ 		if(duration > 0) {
+			List<LeaveDetails> leaveDetailsList = leaveDetailsService.findAll();
+			if (leaveDetailsList.size()==0){
+				leaveId="0";
+			}
+			else {
+				int max=0,temp=0;
+				for(int i=0;i<leaveDetailsList.size();i++){
+					temp = Integer.parseInt(leaveDetailsList.get(i).getLeaveId());
+					if(temp > max)
+						max = temp;
+				}
+				//int leavesId = Integer.parseInt(leaveDetailsList.stream().max(Comparator.comparing(LeaveDetails::getLeaveId)).get().getLeaveId());
+				//logger.info(String.valueOf(leavesId));
+				//logger.info(String.valueOf(leavesId+1));
+				leaveId = String.valueOf(max+1);
+			}
+			leaveDetails.setLeaveId(leaveId);
+			leaveDetails.setStudentsDetails(studentsDetails);
+			leaveDetails.setLeaveStartDate(startDate);
+			leaveDetails.setLeaveEndDate(endDate);
+			leaveDetails.setLeaveType(leaveInformation.getLeaveType());
+			leaveDetails.setLeaveDuration(duration);
+			leaveDetailsRepository.save(leaveDetails);
+			message="Leave is planned successfully";
+			logger.info(message);
+			return ResponseEntity.status(HttpStatus.OK).body(message);
 		}
-		else{
-			long leavesId = Long.parseLong(leaveDetailsList.stream().max(Comparator.comparing(LeaveDetails::getLeaveId)).get().getLeaveId());
-			leaveId = String.valueOf(leavesId+1);
-		}
-
-		leaveDetails.setLeaveId(leaveId);
-		leaveDetails.setStudentsDetails(studentsDetails);
-		leaveDetails.setLeaveStartDate(leaveInformation.getStartDate());
-		leaveDetails.setLeaveEndDate(leaveInformation.getEndDate());
-		leaveDetails.setLeaveType(leaveInformation.getLeaveType());
-		leaveDetails.setLeaveDuration(0);
-		leaveDetailsRepository.save(leaveDetails);
-		logger.info("Leave is planned successfully");
-		return ResponseEntity.status(HttpStatus.OK).body("");
+ 		message="Leaves can not be planned on weekends";
+ 		logger.info(message);
+ 		return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(message);
 	}
 
 

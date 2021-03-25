@@ -22,7 +22,10 @@ class App extends Component {
       if (now.getTime() > item.expiry){
         isLoggedIn = false;
         localStorage.clear();
-        this.props.history.push("/");
+        this.props.history.push({
+          pathname:"/",
+          state:{ isTimeout:true }
+        });
       }
       else{
         isLoggedIn = true;

@@ -42,8 +42,10 @@ class PlanningDashboard extends Component{
             data: leavesList
         }).then(response => {
             console.log(response.data);
+            this.setState({isPlanned:true});
         }).catch(error => {
             console.log(error.response);
+            this.setState({leaveMessage:error.response.data});
         });
     }
 
@@ -59,7 +61,6 @@ class PlanningDashboard extends Component{
         if (leaveDetails.leaveType !== '' && leaveDetails.startDate !== '' && leaveDetails.endDate !== '' && leaveDetails.emailId !== ''){
             this.planLeavesFunction(leaveDetails);
             this.resetForm();
-            this.setState({isPlanned:true});
         }
         else {
             this.setState({leaveMessage:"Missing inputs"});
@@ -111,7 +112,7 @@ class PlanningDashboard extends Component{
                 toastMessage =
                 {
                     title: 'Failure',
-                    description: "Missing inputs",
+                    description: this.state.leaveMessage,
                     backgroundColor: '#d9534f',
                     icon: errorIcon
                 };  
