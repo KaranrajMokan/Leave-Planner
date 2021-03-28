@@ -21,4 +21,8 @@ public class StudentsDetailsService {
     public StudentsDetails findByRollNumber(String rollNumber){
         return studentsDetailsRepository.findByRollNumber(rollNumber);
     }
+
+    public String findNameByRollNumber(String rollNumber){
+        return studentsDetailsRepository.findNameByRollNumber(rollNumber);
+    }
 }

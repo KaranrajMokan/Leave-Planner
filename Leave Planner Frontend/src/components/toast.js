@@ -1,4 +1,5 @@
 import {Component} from 'react';
+import { withRouter } from 'react-router';
 import './toast.css';
 
 class Toast extends Component{
@@ -13,8 +14,13 @@ class Toast extends Component{
     }
 
     destructMe(){
-        if (this.state.page === "login")
-            window.location.href = '/';
+        if (this.state.page === "login"){
+            //window.location.href = '/';
+            this.props.history.push({
+                pathname:"/",
+                state:{ isTimeout:false }
+            });
+        }
         else if (this.state.page === "planning-dashboard"){
             window.location.href = '/planning-dashboard';
         }
@@ -36,4 +42,4 @@ class Toast extends Component{
     }
 }
 
-export default Toast;
+export default withRouter(Toast);

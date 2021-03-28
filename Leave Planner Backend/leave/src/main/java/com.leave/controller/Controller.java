@@ -2,6 +2,7 @@ package com.leave.controller;
 
 import com.leave.config.JwtCreator;
 import com.leave.config.JwtVerifier;
+import com.leave.config.MailGenerator;
 import com.leave.config.Utils;
 import com.leave.model.*;
 import com.leave.repository.LeaveDetailsRepository;
@@ -14,6 +15,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
+import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -51,6 +54,12 @@ public class Controller {
 
 	@Value("${JWT_SECRET}")
 	String secret;
+
+	@Value("${LP_MAIL}")
+	String senderMail;
+
+	@Value("${LP_PASS}")
+	String senderPassword;
 
 	@RequestMapping("/")
 	public String index() {
@@ -101,12 +110,13 @@ public class Controller {
 
 	@PostMapping("/leave-details")
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<String> postLeaveDetails(@RequestBody LeaveInformation leaveInformation){
+	public ResponseEntity<String> postLeaveDetails(@RequestBody LeaveInformation leaveInformation) throws UnsupportedEncodingException, MessagingException {
 		String rollNumber = leaveInformation.getRollNumber();
 		String token = leaveInformation.getStudentToken();
 		LeaveDetails leaveDetails = new LeaveDetails();
 		StudentsDetails studentsDetails = studentsDetailsService.findByRollNumber(rollNumber);
-		jwtVerifier.verifier(secret, rollNumber,token);
+		String name = studentsDetailsService.findNameByRollNumber(rollNumber);
+		jwtVerifier.verifier(secret,rollNumber,token);
 		String leaveId,message;
 		LocalDate startDate = leaveInformation.getStartDate();
 		LocalDate endDate = leaveInformation.getEndDate();
@@ -135,6 +145,7 @@ public class Controller {
 			leaveDetails.setLeaveType(leaveInformation.getLeaveType());
 			leaveDetails.setLeaveDuration(duration);
 			leaveDetailsRepository.save(leaveDetails);
+			MailGenerator.sendMails(senderMail,senderPassword,leaveInformation.getEmailId(),name, rollNumber, leaveInformation.getLeaveType(),startDate,endDate,duration);
 			message="Leave is planned successfully";
 			logger.info(message);
 			return ResponseEntity.status(HttpStatus.OK).body(message);

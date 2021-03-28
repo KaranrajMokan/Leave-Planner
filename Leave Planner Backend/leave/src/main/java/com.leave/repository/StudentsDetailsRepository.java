@@ -10,4 +10,7 @@ public interface StudentsDetailsRepository extends CrudRepository<StudentsDetail
 
     @Query(value = "SELECT * from students_details s where s.rollno = ?1", nativeQuery = true)
     StudentsDetails findByRollNumber(String rollNumber);
+
+    @Query(value = "SELECT name from students_details s where s.rollno = ?1", nativeQuery = true)
+    String findNameByRollNumber(String rollNumber);
 }

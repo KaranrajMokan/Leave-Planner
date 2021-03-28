@@ -69,18 +69,20 @@ class Login extends Component{
                 toaster = <Toast toast={toastMessage} page="login"/>;
             }
         }
-        // if(typeof this.props.location.state !== 'undefined'){
-        //     if (this.props.location.state.isTimeout){
-        //         toastMessage =
-        //         {
-        //             title: 'Timeout',
-        //             description: "Your session has expired",
-        //             backgroundColor: '#d9534f',
-        //             icon: errorIcon
-        //         };
-        //         toaster = <Toast toast={toastMessage} page="login"/>;
-        //     }
-        // }
+        if(typeof this.props.location.state !== 'undefined'){
+            if (this.props.location.state.isTimeout){
+                toastMessage =
+                {
+                    title: 'Timeout',
+                    description: "Your session has expired",
+                    backgroundColor: '#d9534f',
+                    icon: errorIcon
+                };
+                toaster = <Toast toast={toastMessage} page="login"/>;
+            }
+            else
+                toaster = "";
+        }
         return(
             <div>
                 {toaster}
