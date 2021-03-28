@@ -50,6 +50,7 @@ class PlanningDashboard extends Component{
     }
 
     onSubmit(e){
+        var mailFormat = /^([A-Za-z0-9_\-.])+@([A-Za-z0-9_\-.])+.([A-Za-z]{2,4})$/;
         const leaveDetails ={
             rollNumber : rollNumber,
             leaveType : this.state.leaveType.value,
@@ -59,8 +60,13 @@ class PlanningDashboard extends Component{
             studentToken : JSON.parse(localStorage.getItem("studentToken")).token
         };
         if (leaveDetails.leaveType !== '' && leaveDetails.startDate !== '' && leaveDetails.endDate !== '' && leaveDetails.emailId !== ''){
-            this.planLeavesFunction(leaveDetails);
-            this.resetForm();
+            if(mailFormat.test(leaveDetails.emailId)){
+                this.planLeavesFunction(leaveDetails);
+                this.resetForm();
+            }
+            else{
+                this.setState({leaveMessage:"Invalid Email Format"});
+            }
         }
         else {
             this.setState({leaveMessage:"Missing inputs"});
