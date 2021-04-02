@@ -6,6 +6,7 @@ import com.leave.config.MailGenerator;
 import com.leave.config.Utils;
 import com.leave.model.*;
 import com.leave.repository.LeaveDetailsRepository;
+import com.leave.request.DetailsInformation;
 import com.leave.request.LeaveInformation;
 import com.leave.request.LoginInformation;
 import com.leave.service.*;
@@ -106,6 +107,26 @@ public class Controller {
 			resultantString.add(timetableDetail.toString());
 		}
 		return resultantString;
+	}
+
+	@PostMapping("/upcoming-leaves")
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<List<LeaveDetails>> getUpcomingLeaves(@RequestBody DetailsInformation detailsInformation){
+		String rollNumber = detailsInformation.getRollNumber();
+		String token = detailsInformation.getToken();
+		jwtVerifier.verifier(secret,rollNumber,token);
+		List<LeaveDetails> leaveDetailsList = leaveDetailsService.findUpcomingLeavesByRollNumber(rollNumber);
+		return ResponseEntity.status(HttpStatus.OK).body(leaveDetailsList);
+	}
+
+	@PostMapping("/leaves-history")
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<List<LeaveDetails>> getPastLeaves(@RequestBody DetailsInformation detailsInformation){
+		String rollNumber = detailsInformation.getRollNumber();
+		String token = detailsInformation.getToken();
+		jwtVerifier.verifier(secret,rollNumber,token);
+		List<LeaveDetails> leaveDetailsList = leaveDetailsService.findPastLeavesByRollNumber(rollNumber);
+		return ResponseEntity.status(HttpStatus.OK).body(leaveDetailsList);
 	}
 
 	@PostMapping("/leave-details")

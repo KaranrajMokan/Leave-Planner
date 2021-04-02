@@ -32,7 +32,7 @@ class Login extends Component{
                 rollNumber : response.data.rollNumber,
                 name : response.data.name,
                 token : response.data.studentToken,
-                expiry : new Date().getTime() + 300000,
+                expiry : new Date().getTime() + 3000000,
             }
             localStorage.setItem('studentToken', JSON.stringify(studentToken));
             this.props.history.push({
@@ -69,6 +69,7 @@ class Login extends Component{
                 toaster = <Toast toast={toastMessage} page="login"/>;
             }
         }
+        /*
         if(typeof this.props.location.state !== 'undefined'){
             if (this.props.location.state.isTimeout){
                 toastMessage =
@@ -80,9 +81,10 @@ class Login extends Component{
                 };
                 toaster = <Toast toast={toastMessage} page="login"/>;
             }
-            else
+            else{
                 toaster = "";
-        }
+            }
+        }*/
         return(
             <div>
                 {toaster}
