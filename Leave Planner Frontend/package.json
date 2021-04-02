@@ -10,6 +10,7 @@
     "bootstrap": "^4.6.0",
     "cors": "^2.8.5",
     "flatpickr": "^4.6.9",
+    "font-awesome": "^4.7.0",
     "react": "^17.0.1",
     "react-bootstrap": "^1.5.2",
     "react-datepicker": "^3.6.0",

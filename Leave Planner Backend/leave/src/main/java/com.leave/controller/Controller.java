@@ -116,6 +116,10 @@ public class Controller {
 		String token = detailsInformation.getToken();
 		jwtVerifier.verifier(secret,rollNumber,token);
 		List<LeaveDetails> leaveDetailsList = leaveDetailsService.findUpcomingLeavesByRollNumber(rollNumber);
+		if(leaveDetailsList.size()>0)
+			logger.info("Successfully fetched upcoming leaves for "+rollNumber);
+		else
+			logger.info("No upcoming leaves are available for "+rollNumber);
 		return ResponseEntity.status(HttpStatus.OK).body(leaveDetailsList);
 	}
 

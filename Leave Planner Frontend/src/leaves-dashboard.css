@@ -7,3 +7,102 @@
     background: #F2F0F0;
     border: 3px solid #DDE8EC;
 }
+
+.big-text{
+    position: relative;
+    font-family: 'Archivo';
+    font-style: normal;
+    font-weight: normal;
+    font-size: 23px;
+    line-height: 24px;
+    color: #10A6DC;
+    left: 15%;
+}
+
+.big-text-hyphen{
+    position: relative;
+    font-family: 'Archivo';
+    font-style: normal;
+    font-weight: normal;
+    font-size: 23px;
+    line-height: 24px;
+    color: #000000;
+    left: 15%;
+}
+
+
+.small-text{
+    position: relative;
+    font-family: 'Archivo';
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 16px;
+    color: #000000;
+    left: 15%;
+}
+
+.downtown-texts{
+    position: relative;
+    font-family: 'Archivo';
+    font-style: normal;
+    font-weight: normal;
+    font-size: 20px;
+    line-height: 22px;
+    color: #000000;
+    padding-top: 2%;
+    left: 20%;
+}
+
+
+
+.pad-lines-new{
+    position: relative;
+    margin-top: 4.5%;
+}
+
+.icon-styles{
+    position: relative;
+    color: #10A6DC;
+    left: 10%;
+    font-size: 22px;
+}
+
+.total-aligns{
+    position: relative;
+    top:3%;
+}
+
+.edit-styles{
+    position: relative;
+    color: #10A6DC;
+    left: 19.5%;
+    font-size: 22px;
+}
+
+.trash-styles{
+    position: relative;
+    color: #10A6DC;
+    left: 21.5%;
+    font-size: 22px;
+}
+
+.edit-styles-one{
+    position: relative;
+    color: #10A6DC;
+    left: 46%;
+    font-size: 22px;
+}
+
+.trash-styles-one{
+    position: relative;
+    color: #10A6DC;
+    left: 48%;
+    font-size: 22px;
+}
+
+.img-loc{
+    position: relative;
+    padding-top:28%;
+    right:2%;
+}
