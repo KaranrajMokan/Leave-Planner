@@ -15,11 +15,11 @@ class Toast extends Component{
 
     destructMe(){
         if (this.state.page === "login"){
-            //window.location.href = '/';
-            this.props.history.push({
+            window.location.href = '/';
+            /*this.props.history.push({
                 pathname:"/",
                 state:{ isTimeout:false }
-            });
+            });*/
         }
         else if (this.state.page === "planning-dashboard"){
             window.location.href = '/planning-dashboard';
