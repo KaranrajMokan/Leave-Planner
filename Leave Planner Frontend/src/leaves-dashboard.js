@@ -46,7 +46,6 @@ class LeavesDashboard extends Component{
         });
     }
 
-    
     render(){
         const halfName = "Hello, "+JSON.parse(localStorage.getItem("studentToken")).name;
         const displayName = <div className="positions end-texts">{halfName}</div>;
@@ -121,7 +120,7 @@ class LeavesDashboard extends Component{
                         <div className="leaves-rectangle"> 
                             <div className="texts size1 div1">Upcoming leaves</div>
                             <div className="lines-new"></div>
-                            <div className="total-aligns">{displayLeaves}</div> 
+                                <div className="total-aligns">{displayLeaves}</div> 
                         </div>
                     </div>
                 </div>

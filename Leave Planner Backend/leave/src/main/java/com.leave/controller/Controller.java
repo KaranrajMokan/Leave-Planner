@@ -70,8 +70,6 @@ public class Controller {
 	@GetMapping("/students-details")
 	public List<String> getStudentsDetails(){
 		List<StudentsDetails> studentsDetailsList = studentsDetailsService.findAll();
-		//HashMap<String, Object> studentsDetails = new HashMap<>();
-		//studentsDetails.put("students",studentsDetailsList);
 		List<String> resultantString = new ArrayList<>();
 		for(StudentsDetails studentsDetail: studentsDetailsList){
 			resultantString.add(studentsDetail.toString());
@@ -158,9 +156,6 @@ public class Controller {
 					if(temp > max)
 						max = temp;
 				}
-				//int leavesId = Integer.parseInt(leaveDetailsList.stream().max(Comparator.comparing(LeaveDetails::getLeaveId)).get().getLeaveId());
-				//logger.info(String.valueOf(leavesId));
-				//logger.info(String.valueOf(leavesId+1));
 				leaveId = String.valueOf(max+1);
 			}
 			leaveDetails.setLeaveId(leaveId);
