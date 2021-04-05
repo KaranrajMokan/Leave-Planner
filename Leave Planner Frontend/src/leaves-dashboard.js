@@ -7,7 +7,7 @@ import NoUpcomingLeaves from './images/bull-upcoming.png'
 
 var days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 var month = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-var displayLeaves=[];
+var displayUpcomingLeaves=[];
 var FontAwesome = require('react-fontawesome');
 class LeavesDashboard extends Component{
 
@@ -15,6 +15,7 @@ class LeavesDashboard extends Component{
         super(props);
         this.logoutFunction = this.logoutFunction.bind(this);
         this.getUpcomingLeaves = this.getUpcomingLeaves(this);
+        this.computeAndDisplayUpcomingLeaves = this.computeAndDisplayUpcomingLeaves.bind(this);
         this.state = {
             data : ""
         }
@@ -46,11 +47,9 @@ class LeavesDashboard extends Component{
         });
     }
 
-    render(){
-        const halfName = "Hello, "+JSON.parse(localStorage.getItem("studentToken")).name;
-        const displayName = <div className="positions end-texts">{halfName}</div>;
+    computeAndDisplayUpcomingLeaves(){
         if(this.state.data.length > 0){
-            displayLeaves.pop()
+            displayUpcomingLeaves.pop()
             for(var i=0;i<this.state.data.length;i++){
                 var leave = this.state.data[i];
                 if (leave.leaveDuration === 1){
@@ -62,10 +61,10 @@ class LeavesDashboard extends Component{
                     else{
                         dates = new Date(leave.leaveEndDate);
                     }
-                    displayLeaves.push(<div className="total-aligns">
+                    displayUpcomingLeaves.push(<div className="total-aligns-new">
                     <FontAwesome className="icon-styles" name="calendar"/><span className="big-text">{month[dates.getMonth()]} {dates.getDate()} </span>
-                    <span className="small-text">{days[dates.getDay()]}</span> <button id={leave.leaveId} className="empty-button edit-styles-one"> <FontAwesome name="edit"/></button> 
-                    <button id={leave.leaveId} className="empty-button trash-styles-one"><FontAwesome name="trash"/></button> 
+                    <span className="small-text">{days[dates.getDay()]}</span> <button id={leave.leaveId} className="empty-button edit-styles"> <FontAwesome name="edit"/></button> 
+                    <button id={leave.leaveId} className="empty-button trash-styles"><FontAwesome name="trash"/></button> 
                     <div className="downtown-texts"> {leave.leaveDuration} day {leave.leaveType.toLowerCase()}</div>
                     <div className="lines-new pad-lines-new"></div>
                     </div>);
@@ -95,7 +94,7 @@ class LeavesDashboard extends Component{
                         else if(daysOfWeek === 6)
                             endDate.setDate(endDate.getDate()-1);
                     }
-                    displayLeaves.push(<div className="total-aligns">
+                    displayUpcomingLeaves.push(<div className="total-aligns-new">
                     <FontAwesome className="icon-styles" name="calendar"/><span className="big-text">{month[startDate.getMonth()]} {startDate.getDate()} </span>
                     <span className="small-text">{days[startDate.getDay()]}</span><span className="big-text-hyphen"> - </span><span className="big-text">{month[endDate.getMonth()]} {endDate.getDate()} </span>
                     <span className="small-text">{days[endDate.getDay()]}</span> <button id={leave.leaveId} className="empty-button edit-styles"> <FontAwesome name="edit"/></button> 
@@ -105,11 +104,17 @@ class LeavesDashboard extends Component{
                     </div>);
                 }
             }
-        }
+        }        
         else{
-            if(displayLeaves.length === 0)
-                displayLeaves.push(<img className="img-loc" src={NoUpcomingLeaves} alt="No upcoming leaves"></img>);
+            if(displayUpcomingLeaves.length === 0)
+                displayUpcomingLeaves.push(<img className="img-loc" src={NoUpcomingLeaves} alt="No upcoming leaves"></img>);
         }
+    }
+
+    render(){
+        const halfName = "Hello, "+JSON.parse(localStorage.getItem("studentToken")).name;
+        const displayName = <div className="positions end-texts">{halfName}</div>;
+        this.computeAndDisplayUpcomingLeaves();
         return(
         <div>
             <img className="image-div" src={Logo} alt=""></img>
@@ -120,7 +125,7 @@ class LeavesDashboard extends Component{
                         <div className="leaves-rectangle"> 
                             <div className="texts size1 div1">Upcoming leaves</div>
                             <div className="lines-new"></div>
-                                <div className="total-aligns">{displayLeaves}</div> 
+                                <div className="total-aligns upcoming-leaves">{displayUpcomingLeaves}</div> 
                         </div>
                     </div>
                 </div>

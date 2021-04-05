@@ -71,32 +71,31 @@
     top:3%;
 }
 
-.edit-styles{
+.total-aligns-new{
     position: relative;
+    padding-top: 5%;
+}
+
+.upcoming-leaves{
+    max-height: 650px;
+    overflow: hidden;
+    overflow-y: auto;
+    scrollbar-color: #aeaeae;
+    scrollbar-width: thin;
+}
+
+.edit-styles{
     color: #10A6DC;
-    left: 19.5%;
     font-size: 22px;
+    float: right;
+    margin-right: 13%;
 }
 
 .trash-styles{
-    position: relative;
     color: #10A6DC;
-    left: 21.5%;
     font-size: 22px;
-}
-
-.edit-styles-one{
-    position: relative;
-    color: #10A6DC;
-    left: 46%;
-    font-size: 22px;
-}
-
-.trash-styles-one{
-    position: relative;
-    color: #10A6DC;
-    left: 48%;
-    font-size: 22px;
+    float: right;
+    margin-right: -18%;
 }
 
 .img-loc{
