@@ -6,6 +6,7 @@ import com.leave.config.MailGenerator;
 import com.leave.config.Utils;
 import com.leave.model.*;
 import com.leave.repository.LeaveDetailsRepository;
+import com.leave.request.DeleteInformation;
 import com.leave.request.DetailsInformation;
 import com.leave.request.LeaveInformation;
 import com.leave.request.LoginInformation;
@@ -133,6 +134,22 @@ public class Controller {
 		else
 			logger.info("No leaves history is available for "+rollNumber);
 		return ResponseEntity.status(HttpStatus.OK).body(leaveDetailsList);
+	}
+
+	@DeleteMapping("/delete-leaves")
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<String> deleteLeave(@RequestBody DeleteInformation deleteInformation){
+		String leaveId = deleteInformation.getLeaveId();
+		String rollNumber = deleteInformation.getRollNumber();
+		String token = deleteInformation.getToken();
+		jwtVerifier.verifier(secret,rollNumber,token);
+		int response = leaveDetailsService.deleteLeavesByLeaveId(leaveId);
+		if(response != 0){
+			logger.info("Leave is deleted successfully");
+			return ResponseEntity.status(HttpStatus.OK).body("Leave is deleted successfully");
+		}
+		logger.info("Leave with "+leaveId+" can not be found");
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Leave with "+leaveId+" can not be found");
 	}
 
 	@PostMapping("/leave-details")

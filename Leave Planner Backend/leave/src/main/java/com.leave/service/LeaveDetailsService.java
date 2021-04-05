@@ -26,5 +26,9 @@ public class LeaveDetailsService {
     public List<LeaveDetails> findPastLeavesByRollNumber(String rollNumber){
         return leaveDetailsRepository.findPastLeaves(rollNumber,Date.valueOf(LocalDate.now()));
     }
+
+    public int deleteLeavesByLeaveId(String leaveId){
+        return leaveDetailsRepository.deleteLeavesById(leaveId);
+    }
 }
 

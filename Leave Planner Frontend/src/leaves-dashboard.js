@@ -20,6 +20,8 @@ class LeavesDashboard extends Component{
         this.getPastLeaves = this.getPastLeaves(this);
         this.computeAndDisplayUpcomingLeaves = this.computeAndDisplayUpcomingLeaves.bind(this);
         this.computeAndDisplayPastLeaves = this.computeAndDisplayPastLeaves.bind(this);
+        this.handleEditLeaves = this.handleEditLeaves.bind(this);
+        this.handleDeleteLeaves = this.handleDeleteLeaves.bind(this);
         this.state = {
             upcomingLeaveData : "",
             pastLeaveData : ""
@@ -43,9 +45,6 @@ class LeavesDashboard extends Component{
             data: requestParameters
         }).then(response=> {
             console.log(response.data);
-            // for(var i=0;i<response.data.length;i++){
-            //     upcomingLeaveDetails.push(response.data[i]);
-            // }
             this.setState({upcomingLeaveData: response.data});
         }).catch(error => {
             console.log(error.response);
@@ -86,8 +85,8 @@ class LeavesDashboard extends Component{
                     }
                     displayUpcomingLeaves.push(<div className="total-aligns-new">
                     <FontAwesome className="icon-styles" name="calendar"/><span className="big-text">{month[dates.getMonth()]} {dates.getDate()} </span>
-                    <span className="small-text">{days[dates.getDay()]}</span> <button id={leave.leaveId} className="empty-button edit-styles"> <FontAwesome name="edit"/></button> 
-                    <button id={leave.leaveId} className="empty-button trash-styles"><FontAwesome name="trash"/></button> 
+                    <span className="small-text">{days[dates.getDay()]}</span> <button onClick={this.handleEditLeaves} className="empty-button edit-styles"><FontAwesome id={leave.leaveId} name="edit"/></button> 
+                    <button onClick={this.handleDeleteLeaves} className="empty-button trash-styles"><FontAwesome id={leave.leaveId} name="trash"/></button> 
                     <div className="downtown-texts"> {leave.leaveDuration} day {leave.leaveType.toLowerCase()}</div>
                     <div className="lines-new pad-lines-new"></div>
                     </div>);
@@ -120,8 +119,8 @@ class LeavesDashboard extends Component{
                     displayUpcomingLeaves.push(<div className="total-aligns-new">
                     <FontAwesome className="icon-styles" name="calendar"/><span className="big-text">{month[startDate.getMonth()]} {startDate.getDate()} </span>
                     <span className="small-text">{days[startDate.getDay()]}</span><span className="big-text-hyphen"> - </span><span className="big-text">{month[endDate.getMonth()]} {endDate.getDate()} </span>
-                    <span className="small-text">{days[endDate.getDay()]}</span> <button id={leave.leaveId} className="empty-button edit-styles"> <FontAwesome name="edit"/></button> 
-                    <button id={leave.leaveId} className="empty-button trash-styles"><FontAwesome name="trash"/></button> 
+                    <span className="small-text">{days[endDate.getDay()]}</span> <button onClick={this.handleEditLeaves} className="empty-button edit-styles"> <FontAwesome id={leave.leaveId} name="edit"/></button> 
+                    <button onClick={this.handleDeleteLeaves} className="empty-button trash-styles"><FontAwesome id={leave.leaveId} name="trash"/></button> 
                     <div className="downtown-texts"> {leave.leaveDuration} day {leave.leaveType.toLowerCase()}s</div>
                     <div className="lines-new pad-lines-new"></div>
                     </div>);
@@ -202,7 +201,32 @@ class LeavesDashboard extends Component{
             if(displayPastLeaves.length === 0)
                 displayPastLeaves.push(<img className="img-loc" src={NoLeavesHistory} alt="No upcoming leaves"></img>);
         }
+    }
 
+    handleEditLeaves(e){
+        const editLeave = this.state.upcomingLeaveData.filter(leave => leave.leaveId === e.target.id);
+        console.log(editLeave);
+    }
+
+    handleDeleteLeaves(e){
+        const deleteLeave = this.state.upcomingLeaveData.filter(leave => leave.leaveId === e.target.id);
+        console.log(deleteLeave);
+        const details = JSON.parse(localStorage.getItem("studentToken"));
+        const requestParameters = {
+            leaveId : e.target.id,
+            rollNumber : details.rollNumber,
+            token : details.token
+        }
+        axios.request({
+            method:'delete',
+            url:'http://localhost:8080/delete-leaves',
+            data: requestParameters
+        }).then(response=> {
+            console.log(response.data);
+            //window.location.href = '/leaves-dashboard';
+        }).catch(error => {
+            console.log(error.response);
+        });
     }
 
     render(){
