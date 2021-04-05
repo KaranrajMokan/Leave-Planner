@@ -128,6 +128,10 @@ public class Controller {
 		String token = detailsInformation.getToken();
 		jwtVerifier.verifier(secret,rollNumber,token);
 		List<LeaveDetails> leaveDetailsList = leaveDetailsService.findPastLeavesByRollNumber(rollNumber);
+		if(leaveDetailsList.size()>0)
+			logger.info("Successfully fetched past leaves for "+rollNumber);
+		else
+			logger.info("No leaves history is available for "+rollNumber);
 		return ResponseEntity.status(HttpStatus.OK).body(leaveDetailsList);
 	}
 

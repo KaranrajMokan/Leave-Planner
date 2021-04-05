@@ -4,10 +4,12 @@ import Logo from './images/LP-logo.png';
 import NavBar from './components/nav-bar';
 import axios from 'axios';
 import NoUpcomingLeaves from './images/bull-upcoming.png'
+import NoLeavesHistory from './images/bull-history.png'
 
 var days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 var month = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 var displayUpcomingLeaves=[];
+var displayPastLeaves=[];
 var FontAwesome = require('react-fontawesome');
 class LeavesDashboard extends Component{
 
@@ -15,9 +17,12 @@ class LeavesDashboard extends Component{
         super(props);
         this.logoutFunction = this.logoutFunction.bind(this);
         this.getUpcomingLeaves = this.getUpcomingLeaves(this);
+        this.getPastLeaves = this.getPastLeaves(this);
         this.computeAndDisplayUpcomingLeaves = this.computeAndDisplayUpcomingLeaves.bind(this);
+        this.computeAndDisplayPastLeaves = this.computeAndDisplayPastLeaves.bind(this);
         this.state = {
-            data : ""
+            upcomingLeaveData : "",
+            pastLeaveData : ""
         }
     }
 
@@ -41,17 +46,35 @@ class LeavesDashboard extends Component{
             // for(var i=0;i<response.data.length;i++){
             //     upcomingLeaveDetails.push(response.data[i]);
             // }
-            this.setState({data: response.data});
+            this.setState({upcomingLeaveData: response.data});
+        }).catch(error => {
+            console.log(error.response);
+        });
+    }
+
+    getPastLeaves(){
+        const details = JSON.parse(localStorage.getItem("studentToken"));
+        const requestParameters = {
+            rollNumber : details.rollNumber,
+            token : details.token
+        }
+        axios.request({
+            method:'post',
+            url:'http://localhost:8080/leaves-history',
+            data: requestParameters
+        }).then(response=> {
+            console.log(response.data);
+            this.setState({pastLeaveData: response.data});
         }).catch(error => {
             console.log(error.response);
         });
     }
 
     computeAndDisplayUpcomingLeaves(){
-        if(this.state.data.length > 0){
-            displayUpcomingLeaves.pop()
-            for(var i=0;i<this.state.data.length;i++){
-                var leave = this.state.data[i];
+        if(this.state.upcomingLeaveData.length > 0){
+            displayUpcomingLeaves=[]
+            for(var i=0;i<this.state.upcomingLeaveData.length;i++){
+                var leave = this.state.upcomingLeaveData[i];
                 if (leave.leaveDuration === 1){
                     var dayOfWeek = new Date(leave.leaveStartDate).getDay();
                     var dates;
@@ -111,10 +134,83 @@ class LeavesDashboard extends Component{
         }
     }
 
+    computeAndDisplayPastLeaves(){
+        if(this.state.pastLeaveData.length > 0){
+            displayPastLeaves=[]
+            for(var i=0;i<this.state.pastLeaveData.length;i++){
+                var divider;
+                if(i !== this.state.pastLeaveData.length-1)
+                    divider=<div className="conjunction"></div>;
+                else
+                    divider="";
+                var leave = this.state.pastLeaveData[i];
+                if (leave.leaveDuration === 1){
+                    var dayOfWeek = new Date(leave.leaveStartDate).getDay();
+                    var dates;
+                    if(dayOfWeek !== 0 && dayOfWeek !== 6){
+                        dates = new Date(leave.leaveStartDate);
+                    }
+                    else{
+                        dates = new Date(leave.leaveEndDate);
+                    }
+                    displayPastLeaves.push(<div className="total-aligns-new-history">
+                        <div className="small-box">
+                            <div className="dates">{month[dates.getMonth()]} {dates.getDate()}</div>
+                            <div className="single-leaveType">{leave.leaveType}</div>
+                        </div>
+                        <div className="divider">{divider}</div>
+                    </div>);
+                }
+                else{
+                    var daysOfWeek = new Date(leave.leaveStartDate).getDay();
+                    var startDate;
+                    var endDate;
+                    if(daysOfWeek !== 0 && daysOfWeek !== 6){
+                        startDate = new Date(leave.leaveStartDate);
+                    }
+                    else{
+                        startDate = new Date(leave.leaveStartDate);
+                        if(daysOfWeek === 0)
+                            startDate.setDate(startDate.getDate()+1);
+                        else if(daysOfWeek === 6)
+                            startDate.setDate(startDate.getDate()+2);
+                    }
+                    daysOfWeek = new Date(leave.leaveEndDate).getDay();
+                    if(daysOfWeek !== 0 && daysOfWeek !== 6){
+                        endDate = new Date(leave.leaveEndDate);
+                    }
+                    else{
+                        endDate = new Date(leave.leaveEndDate);
+                        if(daysOfWeek === 0)
+                            endDate.setDate(endDate.getDate()-2);
+                        else if(daysOfWeek === 6)
+                            endDate.setDate(endDate.getDate()-1);
+                    }
+                    displayPastLeaves.push(<div key={leave.leaveId} className="total-aligns-new-history">
+                        <div className="big-box">
+                            <div className="startDate">{month[startDate.getMonth()]} {startDate.getDate()}</div>
+                            <div className="endDate">{month[endDate.getMonth()]} {endDate.getDate()}</div>
+                            <div className="leaveType">{leave.leaveType}s</div> 
+                            <div className="leaveDuration">({leave.leaveDuration} days)</div>
+                        </div>
+                        <div className="divider">{divider}</div>
+                    </div>);
+                }
+            }
+        }        
+        else{
+            if(displayPastLeaves.length === 0)
+                displayPastLeaves.push(<img className="img-loc" src={NoLeavesHistory} alt="No upcoming leaves"></img>);
+        }
+
+    }
+
     render(){
         const halfName = "Hello, "+JSON.parse(localStorage.getItem("studentToken")).name;
         const displayName = <div className="positions end-texts">{halfName}</div>;
         this.computeAndDisplayUpcomingLeaves();
+        this.computeAndDisplayPastLeaves();
+        console.log(this.state.pastLeaveData);
         return(
         <div>
             <img className="image-div" src={Logo} alt=""></img>
@@ -122,10 +218,15 @@ class LeavesDashboard extends Component{
                 <div><NavBar />{displayName}<button className="logout-but end-texts" onClick={this.logoutFunction}>LOGOUT</button></div>
                 <div className="line-div">
                     <div className="inner-div">
-                        <div className="leaves-rectangle"> 
+                        <div className="leaves-rectangle1"> 
                             <div className="texts size1 div1">Upcoming leaves</div>
                             <div className="lines-new"></div>
-                                <div className="total-aligns upcoming-leaves">{displayUpcomingLeaves}</div> 
+                                <div className="total-aligns leaves-scroll">{displayUpcomingLeaves}</div> 
+                        </div>
+                        <div className="leaves-rectangle2">
+                            <div className="texts size1 div1">Leaves History</div>
+                            <div className="lines-new"></div>
+                                <div className="adjustment leaves-scroll">{displayPastLeaves}</div>
                         </div>
                     </div>
                 </div>

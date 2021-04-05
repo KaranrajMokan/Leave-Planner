@@ -1,4 +1,4 @@
-.leaves-rectangle{
+.leaves-rectangle1{
     position: absolute;
     top: 7%;
     left: 10%;
@@ -76,7 +76,7 @@
     padding-top: 5%;
 }
 
-.upcoming-leaves{
+.leaves-scroll{
     max-height: 650px;
     overflow: hidden;
     overflow-y: auto;
@@ -102,4 +102,105 @@
     position: relative;
     padding-top:28%;
     right:2%;
+}
+
+
+.leaves-rectangle2{
+    position: absolute;
+    top: 7%;
+    left: 54.5%;
+    right: 12%;
+    bottom: 7%;
+    background: #F2F0F0;
+    border: 3px solid #DDE8EC;
+}
+
+.big-box{
+    position: relative;
+    width: 265px;
+    height: 112px;
+    left: 15%;
+    background: #DBEEF4;
+    border-radius: 50px;
+    font-family: 'Archivo';
+    font-size: 22px;
+    line-height: 24px;
+}
+
+.small-box{
+    position: relative;
+    width: 265px;
+    height: 75px;
+    left: 15%;
+    background: #DBEEF4;
+    border-radius: 50px;
+    font-family: 'Archivo';
+    font-size: 22px;
+    line-height: 24px;
+}
+
+.conjunction{
+    position: relative;
+    width: 43.05px;
+    height: 0px;
+    left: 45%;
+    border: 2px dashed #0685AD;
+    transform: rotate(-90deg);
+}
+
+.adjustment{
+    position: relative;
+    top: 3%;
+}
+
+.startDate{
+    position: relative;
+    top: 20%;
+    left: 10%;
+}
+
+.endDate{
+    position: relative;
+    top: 35%;
+    left: 10%;
+}
+
+.leaveType{
+    position: relative;
+    bottom: 12%;
+    left: 43%;
+    font-size: 20px;
+    line-height: 22px;
+}
+
+.leaveDuration{
+    position: relative;
+    bottom: 10%;
+    left: 48%;
+    font-size: 20px;
+    line-height: 22px;
+}
+
+.total-aligns-new-history{
+    position: relative;
+    padding-top: 5.5%;
+}
+
+.dates{
+    position: relative;
+    top: 30%;
+    left: 10%;
+}
+
+.single-leaveType{
+    position: relative;
+    bottom: 0%;
+    left: 43%;
+    font-size: 20px;
+    line-height: 22px;
+}
+
+.divider{
+    position: relative;
+    padding-top: 5%;
 }
