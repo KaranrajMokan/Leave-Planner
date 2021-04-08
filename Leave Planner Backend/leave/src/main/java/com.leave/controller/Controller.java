@@ -186,7 +186,12 @@ public class Controller {
 			leaveDetails.setLeaveType(leaveInformation.getLeaveType());
 			leaveDetails.setLeaveDuration(duration);
 			leaveDetailsRepository.save(leaveDetails);
-			MailGenerator.sendMails(senderMail,senderPassword,leaveInformation.getEmailId(),name, rollNumber, leaveInformation.getLeaveType(),startDate,endDate,duration);
+			if(!leaveInformation.getEmailId().equals("")) {
+				String[] listOfEmails = leaveInformation.getEmailId().split(",");
+				for (String listOfEmail : listOfEmails) {
+					MailGenerator.sendMails(senderMail, senderPassword, listOfEmail, name, rollNumber, leaveInformation.getLeaveType(), startDate, endDate, duration);
+				}
+			}
 			message="Leave is planned successfully";
 			logger.info(message);
 			return ResponseEntity.status(HttpStatus.OK).body(message);

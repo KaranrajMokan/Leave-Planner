@@ -59,13 +59,30 @@ class PlanningDashboard extends Component{
             emailId : this.refs.email.value,
             studentToken : JSON.parse(localStorage.getItem("studentToken")).token
         };
-        if (leaveDetails.leaveType !== '' && leaveDetails.startDate !== '' && leaveDetails.endDate !== '' && leaveDetails.emailId !== ''){
-            if(mailFormat.test(leaveDetails.emailId)){
+        if (leaveDetails.leaveType !== '' && leaveDetails.startDate !== '' && leaveDetails.endDate !== ''){
+            if(leaveDetails.emailId !== ''){
+                var listOfEmails = leaveDetails.emailId.split(",");
+                var flag=0;
+                for(var i=0;i<listOfEmails.length;i++){
+                    if(mailFormat.test(listOfEmails[i])){
+                        flag=0;
+                    }
+                    else{
+                        flag=1;
+                        break;
+                    }
+                }
+                if(flag === 0){
+                    this.planLeavesFunction(leaveDetails);
+                    this.resetForm();
+                }
+                else if(flag === 1){
+                    this.setState({leaveMessage:"Invalid Email Format"});
+                }
+            }
+            else {
                 this.planLeavesFunction(leaveDetails);
                 this.resetForm();
-            }
-            else{
-                this.setState({leaveMessage:"Invalid Email Format"});
             }
         }
         else {
@@ -145,7 +162,7 @@ class PlanningDashboard extends Component{
                                 <div className="boxes"><input type="date" id="startDate" min={new Date().toISOString().split('T')[0]} onChange={this.setEndLimit} className="form-control" ref="startDate"/></div>
                                 <div className="texts size2 div4">End Date&nbsp;<span className="red-color">*</span></div>
                                 <div className="boxes"><input type="date" min={this.state.endDateLimit} className="form-control" ref="endDate"/></div>
-                                <div className="texts size2 div4">Send leave notifications to &nbsp;<span className="red-color">*</span></div>
+                                <div className="texts size2 div4">Send leave notifications to</div>
                                 <div className="boxes"><input type="text" className="form-control" ref="email"/></div>
                                 <p className="texts div5">Use comma seperated values (not spaces)</p>
                                 <button type="button"className="button1" onClick={this.resetForm}>Reset</button> 

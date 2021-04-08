@@ -87,7 +87,7 @@ class LeavesDashboard extends Component{
                     <FontAwesome className="icon-styles" name="calendar"/><span className="big-text">{month[dates.getMonth()]} {dates.getDate()} </span>
                     <span className="small-text">{days[dates.getDay()]}</span> <button onClick={this.handleEditLeaves} className="empty-button edit-styles"><FontAwesome id={leave.leaveId} name="edit"/></button> 
                     <button onClick={this.handleDeleteLeaves} className="empty-button trash-styles"><FontAwesome id={leave.leaveId} name="trash"/></button> 
-                    <div className="downtown-texts"> {leave.leaveDuration} day {leave.leaveType.toLowerCase()}</div>
+                    <div className="downtown-texts"> {leave.leaveDuration} day {leave.leaveType}</div>
                     <div className="lines-new pad-lines-new"></div>
                     </div>);
                 }
@@ -121,7 +121,7 @@ class LeavesDashboard extends Component{
                     <span className="small-text">{days[startDate.getDay()]}</span><span className="big-text-hyphen"> - </span><span className="big-text">{month[endDate.getMonth()]} {endDate.getDate()} </span>
                     <span className="small-text">{days[endDate.getDay()]}</span> <button onClick={this.handleEditLeaves} className="empty-button edit-styles"> <FontAwesome id={leave.leaveId} name="edit"/></button> 
                     <button onClick={this.handleDeleteLeaves} className="empty-button trash-styles"><FontAwesome id={leave.leaveId} name="trash"/></button> 
-                    <div className="downtown-texts"> {leave.leaveDuration} day {leave.leaveType.toLowerCase()}s</div>
+                    <div className="downtown-texts"> {leave.leaveDuration} day {leave.leaveType}s</div>
                     <div className="lines-new pad-lines-new"></div>
                     </div>);
                 }
