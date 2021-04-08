@@ -24,6 +24,9 @@ class Toast extends Component{
         else if (this.state.page === "planning-dashboard"){
             window.location.href = '/planning-dashboard';
         }
+        else if (this.state.page === "leaves-dashboard"){
+            window.location.href = '/leaves-dashboard';
+        }
     }
 
     render(){

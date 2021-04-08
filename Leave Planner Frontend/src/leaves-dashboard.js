@@ -5,11 +5,14 @@ import NavBar from './components/nav-bar';
 import axios from 'axios';
 import NoUpcomingLeaves from './images/bull-upcoming.png'
 import NoLeavesHistory from './images/bull-history.png'
+import Toast from './components/toast';
+import checkIcon from './images/check_icon.png';
 
 var days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 var month = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 var displayUpcomingLeaves=[];
 var displayPastLeaves=[];
+var toaster;
 var FontAwesome = require('react-fontawesome');
 class LeavesDashboard extends Component{
 
@@ -24,7 +27,8 @@ class LeavesDashboard extends Component{
         this.handleDeleteLeaves = this.handleDeleteLeaves.bind(this);
         this.state = {
             upcomingLeaveData : "",
-            pastLeaveData : ""
+            pastLeaveData : "",
+            isLeaveDeleted : false
         }
     }
 
@@ -211,22 +215,25 @@ class LeavesDashboard extends Component{
     handleDeleteLeaves(e){
         const deleteLeave = this.state.upcomingLeaveData.filter(leave => leave.leaveId === e.target.id);
         console.log(deleteLeave);
-        const details = JSON.parse(localStorage.getItem("studentToken"));
-        const requestParameters = {
-            leaveId : e.target.id,
-            rollNumber : details.rollNumber,
-            token : details.token
+        var answer = window.confirm("Are you sure you want to delete this leave?")
+        if(answer){
+            const details = JSON.parse(localStorage.getItem("studentToken"));
+            const requestParameters = {
+                leaveId : e.target.id,
+                rollNumber : details.rollNumber,
+                token : details.token
+            }
+            axios.request({
+                method:'delete',
+                url:'http://localhost:8080/delete-leaves',
+                data: requestParameters
+            }).then(response=> {
+                console.log(response.data);
+                this.setState({isLeaveDeleted: true});
+            }).catch(error => {
+                console.log(error.response);
+            });
         }
-        axios.request({
-            method:'delete',
-            url:'http://localhost:8080/delete-leaves',
-            data: requestParameters
-        }).then(response=> {
-            console.log(response.data);
-            //window.location.href = '/leaves-dashboard';
-        }).catch(error => {
-            console.log(error.response);
-        });
     }
 
     render(){
@@ -234,9 +241,19 @@ class LeavesDashboard extends Component{
         const displayName = <div className="positions end-texts">{halfName}</div>;
         this.computeAndDisplayUpcomingLeaves();
         this.computeAndDisplayPastLeaves();
-        console.log(this.state.pastLeaveData);
+        if(this.state.isLeaveDeleted){
+            var toastMessage =
+            {
+                title: 'Success',
+                description: 'Leave is deleted successfully',
+                backgroundColor: '#5cb85c',
+                icon: checkIcon
+            };
+            toaster = <Toast toast={toastMessage} page="leaves-dashboard"/>;   
+        }
         return(
         <div>
+            {toaster}
             <img className="image-div" src={Logo} alt=""></img>
                 <div className="app-lines change-speed"></div>
                 <div><NavBar />{displayName}<button className="logout-but end-texts" onClick={this.logoutFunction}>LOGOUT</button></div>
