@@ -11,7 +11,7 @@ import java.util.Objects;
 @Setter
 @Entity
 @Table(name = "leave_details")
-public class LeaveDetails {
+public class LeaveDetails implements Comparable<LeaveDetails>{
 
     @Id
     @Column(name="leave_id")
@@ -64,6 +64,13 @@ public class LeaveDetails {
                 ", Leave Duration=" + leaveDuration +
                 ", Leave Type=" + leaveType +
                 "}";
+    }
+
+    @Override
+    public int compareTo(LeaveDetails leaveDetails) {
+        Integer firstValue = Integer.parseInt(this.getLeaveId());
+        Integer secondValue = Integer.parseInt(leaveDetails.getLeaveId());
+        return firstValue.compareTo(secondValue);
     }
 
 }

@@ -4,12 +4,11 @@ import com.leave.config.JwtCreator;
 import com.leave.config.JwtVerifier;
 import com.leave.config.MailGenerator;
 import com.leave.config.Utils;
-import com.leave.model.*;
+import com.leave.model.LeaveDetails;
+import com.leave.model.LoginDetails;
+import com.leave.model.StudentsDetails;
 import com.leave.repository.LeaveDetailsRepository;
-import com.leave.request.DeleteInformation;
-import com.leave.request.DetailsInformation;
-import com.leave.request.LeaveInformation;
-import com.leave.request.LoginInformation;
+import com.leave.request.*;
 import com.leave.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -31,15 +30,6 @@ public class Controller {
 
 	@Autowired
 	StudentsDetailsService studentsDetailsService;
-
-	@Autowired
-	CourseService courseService;
-
-	@Autowired
-	TimetableDetailsService timetableDetailsService;
-
-	@Autowired
-	CourseDetailsService courseDetailsService;
 
 	@Autowired
 	LeaveDetailsRepository leaveDetailsRepository;
@@ -68,46 +58,6 @@ public class Controller {
 		return "Greetings from Spring Boot!";
 	}
 
-	@GetMapping("/students-details")
-	public List<String> getStudentsDetails(){
-		List<StudentsDetails> studentsDetailsList = studentsDetailsService.findAll();
-		List<String> resultantString = new ArrayList<>();
-		for(StudentsDetails studentsDetail: studentsDetailsList){
-			resultantString.add(studentsDetail.toString());
-		}
-		return resultantString;
-	}
-
-	@GetMapping("/course")
-	public List<String> getCourse(){
-		List<Course> courseList = courseService.findAll();
-		List<String> resultantString = new ArrayList<>();
-		for(Course course: courseList){
-			resultantString.add(course.toString());
-		}
-		return resultantString;
-	}
-
-	@GetMapping("/course-details")
-	public List<String> getCourseDetails(){
-		List<CourseDetails> courseDetailsList = courseDetailsService.findAll();
-		List<String> resultantString = new ArrayList<>();
-		for(CourseDetails courseDetail: courseDetailsList){
-			resultantString.add(courseDetail.toString());
-		}
-		return resultantString;
-	}
-
-	@GetMapping("/timetable-details")
-	public List<String> getTimetableDetails(){
-		List<TimetableDetails> timetableDetailsList = timetableDetailsService.findAll();
-		List<String> resultantString = new ArrayList<>();
-		for(TimetableDetails timetableDetail: timetableDetailsList){
-			resultantString.add(timetableDetail.toString());
-		}
-		return resultantString;
-	}
-
 	@PostMapping("/upcoming-leaves")
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<List<LeaveDetails>> getUpcomingLeaves(@RequestBody DetailsInformation detailsInformation){
@@ -129,11 +79,42 @@ public class Controller {
 		String token = detailsInformation.getToken();
 		jwtVerifier.verifier(secret,rollNumber,token);
 		List<LeaveDetails> leaveDetailsList = leaveDetailsService.findPastLeavesByRollNumber(rollNumber);
+		leaveDetailsList.sort(Collections.reverseOrder());
 		if(leaveDetailsList.size()>0)
 			logger.info("Successfully fetched past leaves for "+rollNumber);
 		else
 			logger.info("No leaves history is available for "+rollNumber);
 		return ResponseEntity.status(HttpStatus.OK).body(leaveDetailsList);
+	}
+
+	@PutMapping("/update-leaves")
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<String> updateLeave(@RequestBody UpdateInformation updateInformation){
+		String leaveId = updateInformation.getLeaveId();
+		String leaveType = updateInformation.getLeaveType();
+		String rollNumber = updateInformation.getRollNumber();
+		String token = updateInformation.getStudentToken();
+		jwtVerifier.verifier(secret,rollNumber,token);
+		String responseMessage="Leave with "+leaveId+" can not be found";
+		StudentsDetails studentsDetails = studentsDetailsService.findByRollNumber(rollNumber);
+		LocalDate startDate = updateInformation.getStartDate();
+		LocalDate endDate = updateInformation.getEndDate();
+		int duration = Utils.calculateDuration(startDate,endDate);
+		LeaveDetails leaveDetails = leaveDetailsService.getLeaveById(leaveId);
+		if(leaveDetails != null){
+			leaveDetails.setLeaveId(leaveId);
+			leaveDetails.setLeaveType(leaveType);
+			leaveDetails.setLeaveDuration(duration);
+			leaveDetails.setLeaveStartDate(startDate);
+			leaveDetails.setLeaveEndDate(endDate);
+			leaveDetails.setStudentsDetails(studentsDetails);
+			leaveDetailsRepository.save(leaveDetails);
+			responseMessage="Leave is updated successfully";
+			logger.info(responseMessage);
+			return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+		}
+		logger.info(responseMessage);
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMessage);
 	}
 
 	@DeleteMapping("/delete-leaves")
@@ -143,13 +124,15 @@ public class Controller {
 		String rollNumber = deleteInformation.getRollNumber();
 		String token = deleteInformation.getToken();
 		jwtVerifier.verifier(secret,rollNumber,token);
+		String responseMessage="Leave with "+leaveId+" can not be found";
 		int response = leaveDetailsService.deleteLeavesByLeaveId(leaveId);
 		if(response != 0){
-			logger.info("Leave is deleted successfully");
-			return ResponseEntity.status(HttpStatus.OK).body("Leave is deleted successfully");
+			responseMessage="Leave is deleted successfully";
+			logger.info(responseMessage);
+			return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
 		}
-		logger.info("Leave with "+leaveId+" can not be found");
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Leave with "+leaveId+" can not be found");
+		logger.info(responseMessage);
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMessage);
 	}
 
 	@PostMapping("/leave-details")
@@ -200,7 +183,6 @@ public class Controller {
  		logger.info(message);
  		return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(message);
 	}
-
 
 	@PostMapping("/login-details")
 	@ResponseStatus(HttpStatus.OK)

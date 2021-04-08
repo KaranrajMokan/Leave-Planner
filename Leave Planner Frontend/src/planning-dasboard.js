@@ -23,7 +23,7 @@ class PlanningDashboard extends Component{
         super(props);
         this.state ={
             leaveType: '',
-            isPlanned: false,
+            isPlanned: 0,
             endDateLimit : new Date().toISOString().split('T')[0],
             leaveMessage: '',
             editLeaveId : '',
@@ -51,18 +51,33 @@ class PlanningDashboard extends Component{
     }
 
     planLeavesFunction(leavesList){
-        console.log(this.state.editLeaveId);
-        axios.request({
-            method:'post',
-            url:'http://localhost:8080/leave-details',
-            data: leavesList
-        }).then(response => {
-            console.log(response.data);
-            this.setState({isPlanned:true});
-        }).catch(error => {
-            console.log(error.response);
-            this.setState({leaveMessage:error.response.data});
-        });
+        if(this.state.editLeaveId !== ""){
+            leavesList["leaveId"] = this.state.editLeaveId;
+            axios.request({
+                method:'put',
+                url:'http://localhost:8080/update-leaves',
+                data: leavesList
+            }).then(response => {
+                console.log(response.data);
+                this.setState({isPlanned:2});
+            }).catch(error => {
+                console.log(error.response);
+                this.setState({leaveMessage:error.response.data});
+            });
+        }
+        else{
+            axios.request({
+                method:'post',
+                url:'http://localhost:8080/leave-details',
+                data: leavesList
+            }).then(response => {
+                console.log(response.data);
+                this.setState({isPlanned:1});
+            }).catch(error => {
+                console.log(error.response);
+                this.setState({leaveMessage:error.response.data});
+            });
+        }
     }
 
     onSubmit(e){
@@ -139,7 +154,8 @@ class PlanningDashboard extends Component{
         name = JSON.parse(localStorage.getItem("studentToken")).name;
         const halfName = "Hello, "+name;
         const displayName = <div className="positions end-texts">{halfName}</div>;
-        if(this.state.isPlanned) {
+        if(this.state.isPlanned > 0) {
+            if(this.state.isPlanned === 1){
                 toastMessage =
                 {
                     title: 'Success',
@@ -148,6 +164,17 @@ class PlanningDashboard extends Component{
                     icon: checkIcon
                 };
                 toaster = <Toast toast={toastMessage} page="planning-dashboard"/>;
+            }
+            else if(this.state.isPlanned === 2){
+                toastMessage =
+                {
+                    title: 'Success',
+                    description: 'Leave is updated successfully',
+                    backgroundColor: '#5cb85c',
+                    icon: checkIcon
+                };
+                toaster = <Toast toast={toastMessage} page="planning-dashboard"/>;
+            }
         }
         else{
             if (this.state.leaveMessage !== ""){

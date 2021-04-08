@@ -30,5 +30,9 @@ public class LeaveDetailsService {
     public int deleteLeavesByLeaveId(String leaveId){
         return leaveDetailsRepository.deleteLeavesById(leaveId);
     }
+
+    public LeaveDetails getLeaveById(String leaveId){
+        return leaveDetailsRepository.getLeaveById(leaveId);
+    }
 }
 

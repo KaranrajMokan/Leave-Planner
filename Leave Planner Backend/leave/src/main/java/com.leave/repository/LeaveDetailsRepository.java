@@ -23,4 +23,7 @@ public interface LeaveDetailsRepository extends CrudRepository<LeaveDetails, Str
     @Modifying
     @Query(value = "DELETE from leave_details l where l.leave_id = ?1", nativeQuery = true)
     int deleteLeavesById(String leaveId);
+
+    @Query(value = "SELECT * from leave_details l where l.leave_id = ?1", nativeQuery = true)
+    LeaveDetails getLeaveById(String leaveId);
 }
