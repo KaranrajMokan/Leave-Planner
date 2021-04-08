@@ -25,7 +25,9 @@ class PlanningDashboard extends Component{
             leaveType: '',
             isPlanned: false,
             endDateLimit : new Date().toISOString().split('T')[0],
-            leaveMessage: ''
+            leaveMessage: '',
+            editLeaveId : '',
+            editLeaveType : ''
         };
         this.onSubmit = this.onSubmit.bind(this);
         this.planLeavesFunction = this.planLeavesFunction.bind(this);
@@ -35,7 +37,21 @@ class PlanningDashboard extends Component{
         this.setEndLimit = this.setEndLimit.bind(this);
     }
 
+    componentDidMount(){
+        if(typeof this.props.location.state !== 'undefined'){
+            var leaveDetails = this.props.location.state.leaveDetails;
+            var newLeaves = leaveDetails[0];
+            console.log(newLeaves);
+            this.setState({editLeaveId : newLeaves.leaveId});
+            this.setState({leaveType : {value : newLeaves.leaveType, label : newLeaves.leaveType}});
+            document.getElementById("startDate").defaultValue = newLeaves.leaveStartDate;
+            document.getElementById("endDate").defaultValue = newLeaves.leaveEndDate;
+            window.history.replaceState(null, '');
+        }
+    }
+
     planLeavesFunction(leavesList){
+        console.log(this.state.editLeaveId);
         axios.request({
             method:'post',
             url:'http://localhost:8080/leave-details',
@@ -97,7 +113,10 @@ class PlanningDashboard extends Component{
 
     resetForm(){
         document.getElementById("planning-tab").reset();
+        console.log(document.getElementById("dropDowns"));
         this.setState({leaveType:''});
+        document.getElementById("startDate").defaultValue = "";
+        document.getElementById("endDate").defaultValue = "";
         this.setState({endDateLimit: new Date().toISOString().split('T')[0]});
     }
 
@@ -157,11 +176,12 @@ class PlanningDashboard extends Component{
                             <div className="texts size2 div3">Name &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{name}</div>
                             <form id="planning-tab" onSubmit={this.onSubmit}> 
                                 <div className="texts size2 div1">Leave type &nbsp;<span className="red-color">*</span></div>
-                                <Select className="boxes dropdown-texts" options={leaves} onChange={this.getDropDownValue} value={leaveType} placeholder="Select a leave type"/>
+                                <Select className="boxes dropdown-texts" id="dropDowns" defaultValue={{label: "Kundi", value: "Kundi"}} options={leaves} onChange={this.getDropDownValue} value={leaveType} placeholder="Select a leave type"/>
                                 <div className="texts size2 div1">Start Date&nbsp;<span className="red-color">*</span></div>
-                                <div className="boxes"><input type="date" id="startDate" min={new Date().toISOString().split('T')[0]} onChange={this.setEndLimit} className="form-control" ref="startDate"/></div>
+                                <div className="boxes"><input type="date" id="startDate" min={new Date().toISOString().split('T')[0]} onChange={this.setEndLimit} 
+                                className="form-control" ref="startDate"/></div>
                                 <div className="texts size2 div4">End Date&nbsp;<span className="red-color">*</span></div>
-                                <div className="boxes"><input type="date" min={this.state.endDateLimit} className="form-control" ref="endDate"/></div>
+                                <div className="boxes"><input type="date" id="endDate" min={this.state.endDateLimit} className="form-control" ref="endDate"/></div>
                                 <div className="texts size2 div4">Send leave notifications to</div>
                                 <div className="boxes"><input type="text" className="form-control" ref="email"/></div>
                                 <p className="texts div5">Use comma seperated values (not spaces)</p>

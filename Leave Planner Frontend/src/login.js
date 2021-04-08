@@ -37,7 +37,6 @@ class Login extends Component{
             localStorage.setItem('studentToken', JSON.stringify(studentToken));
             this.props.history.push({
                 pathname:"/planning-dashboard",
-                state:{ detail:response.data }
             });
         }).catch(error => {
             this.setState({ value:false });
@@ -69,7 +68,7 @@ class Login extends Component{
                 toaster = <Toast toast={toastMessage} page="login"/>;
             }
         }
-        /*
+        
         if(typeof this.props.location.state !== 'undefined'){
             if (this.props.location.state.isTimeout){
                 toastMessage =
@@ -81,10 +80,8 @@ class Login extends Component{
                 };
                 toaster = <Toast toast={toastMessage} page="login"/>;
             }
-            else{
-                toaster = "";
-            }
-        }*/
+            window.history.replaceState(null, '');
+        }
         return(
             <div>
                 {toaster}

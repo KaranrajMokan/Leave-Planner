@@ -210,6 +210,10 @@ class LeavesDashboard extends Component{
     handleEditLeaves(e){
         const editLeave = this.state.upcomingLeaveData.filter(leave => leave.leaveId === e.target.id);
         console.log(editLeave);
+        this.props.history.push({
+            pathname:"/planning-dashboard",
+            state:{ leaveDetails : editLeave }
+        });
     }
 
     handleDeleteLeaves(e){
