@@ -9,7 +9,9 @@ import com.leave.model.LoginDetails;
 import com.leave.model.StudentsDetails;
 import com.leave.repository.LeaveDetailsRepository;
 import com.leave.request.*;
-import com.leave.service.*;
+import com.leave.service.LeaveDetailsService;
+import com.leave.service.LoginDetailsService;
+import com.leave.service.StudentsDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -65,6 +67,7 @@ public class Controller {
 		String token = detailsInformation.getToken();
 		jwtVerifier.verifier(secret,rollNumber,token);
 		List<LeaveDetails> leaveDetailsList = leaveDetailsService.findUpcomingLeavesByRollNumber(rollNumber);
+		Collections.sort(leaveDetailsList);
 		if(leaveDetailsList.size()>0)
 			logger.info("Successfully fetched upcoming leaves for "+rollNumber);
 		else
@@ -89,12 +92,13 @@ public class Controller {
 
 	@PutMapping("/update-leaves")
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<String> updateLeave(@RequestBody UpdateInformation updateInformation){
+	public ResponseEntity<String> updateLeave(@RequestBody UpdateInformation updateInformation) throws MessagingException {
 		String leaveId = updateInformation.getLeaveId();
 		String leaveType = updateInformation.getLeaveType();
 		String rollNumber = updateInformation.getRollNumber();
 		String token = updateInformation.getStudentToken();
 		jwtVerifier.verifier(secret,rollNumber,token);
+		String name = studentsDetailsService.findNameByRollNumber(rollNumber);
 		String responseMessage="Leave with "+leaveId+" can not be found";
 		StudentsDetails studentsDetails = studentsDetailsService.findByRollNumber(rollNumber);
 		LocalDate startDate = updateInformation.getStartDate();
@@ -102,6 +106,10 @@ public class Controller {
 		int duration = Utils.calculateDuration(startDate,endDate);
 		LeaveDetails leaveDetails = leaveDetailsService.getLeaveById(leaveId);
 		if(leaveDetails != null){
+			String oldLeaveType = leaveDetails.getLeaveType();
+			LocalDate oldStartDate = leaveDetails.getLeaveStartDate();
+			LocalDate oldEndDate = leaveDetails.getLeaveEndDate();
+			int oldDuration = leaveDetails.getLeaveDuration();
 			leaveDetails.setLeaveId(leaveId);
 			leaveDetails.setLeaveType(leaveType);
 			leaveDetails.setLeaveDuration(duration);
@@ -109,6 +117,12 @@ public class Controller {
 			leaveDetails.setLeaveEndDate(endDate);
 			leaveDetails.setStudentsDetails(studentsDetails);
 			leaveDetailsRepository.save(leaveDetails);
+			if(!updateInformation.getEmailId().equals("")) {
+				String[] listOfEmails = updateInformation.getEmailId().split(",");
+				for (String listOfEmail : listOfEmails) {
+					MailGenerator.sendMails(senderMail, senderPassword, listOfEmail, name, rollNumber, oldLeaveType, oldStartDate, oldEndDate, oldDuration, true, leaveType, startDate, endDate, duration);
+				}
+			}
 			responseMessage="Leave is updated successfully";
 			logger.info(responseMessage);
 			return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
@@ -172,7 +186,7 @@ public class Controller {
 			if(!leaveInformation.getEmailId().equals("")) {
 				String[] listOfEmails = leaveInformation.getEmailId().split(",");
 				for (String listOfEmail : listOfEmails) {
-					MailGenerator.sendMails(senderMail, senderPassword, listOfEmail, name, rollNumber, leaveInformation.getLeaveType(), startDate, endDate, duration);
+					MailGenerator.sendMails(senderMail, senderPassword, listOfEmail, name, rollNumber, leaveInformation.getLeaveType(), startDate, endDate, duration, false, null, null, null, 0);
 				}
 			}
 			message="Leave is planned successfully";

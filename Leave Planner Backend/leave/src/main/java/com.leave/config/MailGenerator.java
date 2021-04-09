@@ -12,7 +12,7 @@ import java.util.Properties;
 
 public class MailGenerator {
 
-    public static void sendMails(String senderMail, String senderPassword, String recipientMail, String name, String rollNumber, String leaveType, LocalDate startDate, LocalDate endDate, int duration) throws MessagingException {
+    public static void sendMails(String senderMail, String senderPassword, String recipientMail, String name, String rollNumber, String leaveType, LocalDate startDate, LocalDate endDate, int duration, boolean isUpdated, String updatedLeaveType, LocalDate updatedStartDate, LocalDate updatedEndDate, int updatedDuration) throws MessagingException {
 
         Properties prop = new Properties();
         prop.setProperty("mail.smtp.auth", "true");
@@ -26,7 +26,13 @@ public class MailGenerator {
             }
         });
         session.setDebug(true);
-        Message message = createMessage(session, senderMail, recipientMail, name, rollNumber, leaveType, startDate, endDate, duration);
+        Message message;
+        if(isUpdated){
+            message = createUpdatedMessage(session, senderMail, recipientMail, name, rollNumber, leaveType, startDate, endDate, duration, updatedLeaveType, updatedStartDate, updatedEndDate, updatedDuration);
+        }
+        else {
+            message = createMessage(session, senderMail, recipientMail, name, rollNumber, leaveType, startDate, endDate, duration);
+        }
         Transport.send(message);
     }
 
@@ -49,6 +55,26 @@ public class MailGenerator {
                 +") is as follows:"+newLine+newLine+"Leave Type: "+leaveType+newLine+"Start Date: "+getDayOfTheWeek(startDate)
                 +", "+formatDate(startDate)+newLine+"End Date: "+getDayOfTheWeek(endDate)+", "
                 +formatDate(endDate)+newLine+"Duration: "+duration+" day[s]";
+        message.setSubject(messageSubject);
+        message.setContent(messageContent,"text/plain");
+        message.saveChanges();
+        return message;
+    }
+
+    private static Message createUpdatedMessage(Session session, String senderMail, String recipientMail, String name, String rollNumber, String leaveType, LocalDate startDate, LocalDate endDate, int duration, String updatedLeaveType, LocalDate updatedStartDate, LocalDate updatedEndDate, int updatedDuration) throws MessagingException{
+        MimeMessage message = new MimeMessage(session);
+        message.setFrom(new InternetAddress(senderMail));
+        message.setRecipient(Message.RecipientType.TO, new InternetAddress(recipientMail));
+        String messageSubject = "[Leave Notification] "+name+" has updated "+leaveType;
+        String newLine=System.getProperty("line.separator");
+        String messageContent = "Hello!"+newLine+"The previous leave plan for "+name+" ("+rollNumber
+                +") is as follows:"+newLine+"Leave Type: "+leaveType+newLine+"Start Date: "+getDayOfTheWeek(startDate)
+                +", "+formatDate(startDate)+newLine+"End Date: "+getDayOfTheWeek(endDate)+", "
+                +formatDate(endDate)+newLine+"Duration: "+duration+" day[s]"+newLine+newLine+newLine
+                +"The new updated leave plan for "+name+" ("+rollNumber
+                +") is as follows:"+newLine+"Leave Type: "+updatedLeaveType+newLine+"Start Date: "+getDayOfTheWeek(updatedStartDate)
+                +", "+formatDate(updatedStartDate)+newLine+"End Date: "+getDayOfTheWeek(updatedEndDate)+", "
+                +formatDate(updatedEndDate)+newLine+"Duration: "+updatedDuration+" day[s]";
         message.setSubject(messageSubject);
         message.setContent(messageContent,"text/plain");
         message.saveChanges();
