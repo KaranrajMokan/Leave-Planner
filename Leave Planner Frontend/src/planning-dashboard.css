@@ -110,3 +110,50 @@
     border: 3px solid #DDE8EC;
 
 }
+
+
+.broad-rectangle{
+    position: relative;
+    width: 613px;
+    height: 740px;
+    background: #F2F0F0;
+    border: 3px solid #DDE8EC;
+    box-sizing: border-box;
+    top: 6.15%;
+    left: 42.5%;
+}
+
+.broad-div{
+    padding-top: 3.5%;
+}
+
+.broad-center-text{
+    position: relative;
+    font-family: 'Archivo';
+    font-size: 24px;
+    line-height: 27px;
+    color: #69C2E2;
+    top: 6%;
+    left: 25%;
+}
+
+.lines-coordinate{
+    position: relative;
+    top: 8.75%;
+}
+
+.new-div-border{
+    position: relative;
+    top: 13%;
+    left: 1.25%;
+}
+
+.vertical-bar{
+    height: 589px;
+    width: 194px;
+    border-radius: 0px;
+    background: #E5E6EF;
+    position: relative;
+    top: -32.85%;
+    left: 68%;
+}

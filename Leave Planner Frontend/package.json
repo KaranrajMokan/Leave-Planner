@@ -11,8 +11,11 @@
     "cors": "^2.8.5",
     "flatpickr": "^4.6.9",
     "font-awesome": "^4.7.0",
+    "moment": "^2.29.1",
     "react": "^17.0.1",
+    "react-big-calendar": "^0.33.2",
     "react-bootstrap": "^1.5.2",
+    "react-calendar": "^3.3.1",
     "react-datepicker": "^3.6.0",
     "react-dom": "^17.0.1",
     "react-dropdown": "^1.9.2",
@@ -22,7 +25,9 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.1",
     "react-select": "^4.2.1",
+    "react-trip-date": "^1.5.2",
     "reactjs-popup": "^2.0.4",
+    "styled-components": "^5.2.3",
     "web-vitals": "^0.2.4"
   },
   "scripts": {

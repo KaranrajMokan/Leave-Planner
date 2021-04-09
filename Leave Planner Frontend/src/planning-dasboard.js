@@ -9,9 +9,7 @@ import Select from 'react-select';
 import Toast from './components/toast';
 import checkIcon from './images/check_icon.png';
 import errorIcon from './images/error_icon.png';
-
-//import DatePicker from "react-datepicker";
-//import { FontAwesome } from 'react-fontawesome';
+import CustomDatePicker from './components/customDatePicker';
 
 var rollNumber;
 var name;
@@ -44,6 +42,7 @@ class PlanningDashboard extends Component{
             console.log(newLeaves);
             this.setState({editLeaveId : newLeaves.leaveId});
             this.setState({leaveType : {value : newLeaves.leaveType, label : newLeaves.leaveType}});
+            this.setState({endDateLimit: newLeaves.leaveStartDate});
             document.getElementById("startDate").defaultValue = newLeaves.leaveStartDate;
             document.getElementById("endDate").defaultValue = newLeaves.leaveEndDate;
             window.history.replaceState(null, '');
@@ -188,6 +187,7 @@ class PlanningDashboard extends Component{
                 toaster = <Toast toast={toastMessage} page="planning-dashboard"/>;
             }
         }
+
         return(
             <div>
                 {toaster}
@@ -216,6 +216,17 @@ class PlanningDashboard extends Component{
                                 <button type="submit" className="button2">Add to Plan</button>
                             </form>
                             <p className="texts div6"><span className="red-color">*</span>Mandatory</p>
+                        </div>
+
+                        <div className="broad-rectangle">
+                            <div className="texts size1 broad-div">Planning Dashboard</div>
+                            <div className="lines-new"></div>
+                            <div className="broad-center-text">Planning Calendar</div>
+                            <div className="lines-new lines-coordinate"></div>
+                            <div className="new-div-border">
+                                <CustomDatePicker />
+                            </div>
+                            <div className="vertical-bar"></div>
                         </div>
                     </div>
                 </div>
