@@ -149,6 +149,18 @@ public class Controller {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMessage);
 	}
 
+	@PostMapping("/leaves")
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<List<LeaveRangeInformation>> postLeaves(@RequestBody LeaveCountInformation leaveCountInformation){
+		String rollNumber = leaveCountInformation.getRollNumber();
+		String token = leaveCountInformation.getToken();
+		LocalDate date = leaveCountInformation.getDate();
+		jwtVerifier.verifier(secret,rollNumber,token);
+		List<LeaveRangeInformation> leaveRangeInformationList = leaveDetailsService.getLeavesByDate(rollNumber,date);
+		logger.info("Leave Details are found for the date "+date);
+		return ResponseEntity.status(HttpStatus.OK).body(leaveRangeInformationList);
+	}
+
 	@PostMapping("/leave-details")
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<String> postLeaveDetails(@RequestBody LeaveInformation leaveInformation) throws UnsupportedEncodingException, MessagingException {

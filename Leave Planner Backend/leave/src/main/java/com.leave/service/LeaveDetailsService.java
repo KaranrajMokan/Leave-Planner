@@ -2,6 +2,8 @@ package com.leave.service;
 
 import com.leave.model.LeaveDetails;
 import com.leave.repository.LeaveDetailsRepository;
+import com.leave.repository.LeaveRangeRepository;
+import com.leave.request.LeaveRangeInformation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,9 @@ public class LeaveDetailsService {
 
     @Autowired
     public LeaveDetailsRepository leaveDetailsRepository;
+
+    @Autowired
+    public LeaveRangeRepository leaveRangeRepository;
 
     public List<LeaveDetails> findAll(){
         return (List<LeaveDetails>) leaveDetailsRepository.findAll();
@@ -33,6 +38,10 @@ public class LeaveDetailsService {
 
     public LeaveDetails getLeaveById(String leaveId){
         return leaveDetailsRepository.getLeaveById(leaveId);
+    }
+
+    public List<LeaveRangeInformation> getLeavesByDate(String rollNumber, LocalDate date){
+        return leaveRangeRepository.getLeavesByDate(rollNumber,date);
     }
 }
 
