@@ -15,7 +15,8 @@ var rollNumber;
 var name;
 var toastMessage="";
 var toaster;
-var leaveMessage = "";
+var leaveMessage = [];
+var month = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 class PlanningDashboard extends Component{
 
     constructor(props){
@@ -27,7 +28,8 @@ class PlanningDashboard extends Component{
             leaveMessage: '',
             editLeaveId : '',
             editLeaveType : '',
-            leaveDetails : ''
+            leaveDetails : '',
+            currentDate : new Date()
         };
         this.onSubmit = this.onSubmit.bind(this);
         this.planLeavesFunction = this.planLeavesFunction.bind(this);
@@ -146,8 +148,9 @@ class PlanningDashboard extends Component{
         this.setState({endDateLimit: document.getElementById("startDate").value});
     }
 
-    displayLeaves(leaves){
+    displayLeaves(leaves,date){
         this.setState({leaveDetails:leaves});
+        this.setState({currentDate:date});
     }
 
     render(){
@@ -195,9 +198,29 @@ class PlanningDashboard extends Component{
             }
         }
         
-        // if(this.state.leaveDetails.length === 0){
-        //     leaveMessage = "No class members have leave plans today";
-        // }
+        if(this.state.leaveDetails.length === 0){
+            leaveMessage=[]
+            leaveMessage.push(<div><div className="vb-top">{(this.state.currentDate+"").slice(4,10)}</div>
+            <div className="vb-bottom">No class members have leave plans</div></div>);
+        }
+        else{
+            leaveMessage=[]
+            leaveMessage.push(<div className="vb-top">{(this.state.currentDate+"").slice(4,10)}</div>);
+            for(var i=0;i<this.state.leaveDetails.length;i++){
+                var personName=this.state.leaveDetails[i].name;
+                var startDate=this.state.leaveDetails[i].leaveStartDate;
+                var endDate=this.state.leaveDetails[i].leaveEndDate;
+                var dates;
+                if(startDate === endDate){
+                    dates = "(" + month[new Date(startDate).getMonth()] +" "+ new Date(startDate).getDate() + ")";
+                }
+                else{
+                    dates = "(" + month[new Date(startDate).getMonth()] +" "+ new Date(startDate).getDate() +
+                    " - "+ month[new Date(endDate).getMonth()] +" "+ new Date(endDate).getDate() +")";
+                }
+                leaveMessage.push(<div className="vb-bottom"><center>{personName}<br/>{dates}</center></div>)
+            }
+        }
 
         return(
             <div>
@@ -237,7 +260,7 @@ class PlanningDashboard extends Component{
                             <div className="new-div-border">
                                 <CustomDatePicker onClickLeave={this.displayLeaves}/>
                             </div>
-                            <div className="vertical-bar">
+                            <div className="vertical-bar vb-scroll">
                                 {leaveMessage}
                             </div>
                         </div>

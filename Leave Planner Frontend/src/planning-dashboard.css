@@ -157,3 +157,32 @@
     top: 19.7%;
     left: 68%;
 }
+
+
+.vb-top{
+    font-family: 'Archivo';
+    font-weight: 600;
+    font-size: 22px;
+    line-height: 24px;
+    position: relative;
+    padding-top:25%;
+    padding-left:30%;
+}
+
+.vb-bottom{
+    font-family: 'Archivo';
+    font-size: 19px;
+    line-height: 20px;
+    position: relative;
+    padding-top: 20%;
+    padding-left: 10%;
+    padding-right: 10%;
+}
+
+.vb-scroll{
+    max-height: 589px;
+    overflow: hidden;
+    overflow-y: auto;
+    scrollbar-color: #aeaeae;
+    scrollbar-width: thin;
+}

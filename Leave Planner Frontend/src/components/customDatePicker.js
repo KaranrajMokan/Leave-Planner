@@ -31,7 +31,7 @@ class CustomDatePicker extends Component{
             data: requestParameters
         }).then(response => {
             //console.log(response.data);
-            this.props.onClickLeave(response.data);
+            this.props.onClickLeave(response.data,e);
         }).catch(error => {
             console.log(error.response);
         });
