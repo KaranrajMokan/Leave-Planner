@@ -15,6 +15,7 @@ var rollNumber;
 var name;
 var toastMessage="";
 var toaster;
+var leaveMessage = "";
 class PlanningDashboard extends Component{
 
     constructor(props){
@@ -25,7 +26,8 @@ class PlanningDashboard extends Component{
             endDateLimit : new Date().toISOString().split('T')[0],
             leaveMessage: '',
             editLeaveId : '',
-            editLeaveType : ''
+            editLeaveType : '',
+            leaveDetails : ''
         };
         this.onSubmit = this.onSubmit.bind(this);
         this.planLeavesFunction = this.planLeavesFunction.bind(this);
@@ -33,6 +35,7 @@ class PlanningDashboard extends Component{
         this.resetForm = this.resetForm.bind(this);
         this.logoutFunction = this.logoutFunction.bind(this);
         this.setEndLimit = this.setEndLimit.bind(this);
+        this.displayLeaves = this.displayLeaves.bind(this);
     }
 
     componentDidMount(){
@@ -143,6 +146,10 @@ class PlanningDashboard extends Component{
         this.setState({endDateLimit: document.getElementById("startDate").value});
     }
 
+    displayLeaves(leaves){
+        this.setState({leaveDetails:leaves});
+    }
+
     render(){
         const {leaveType} = this.state;
         const leaves = [
@@ -187,6 +194,10 @@ class PlanningDashboard extends Component{
                 toaster = <Toast toast={toastMessage} page="planning-dashboard"/>;
             }
         }
+        
+        // if(this.state.leaveDetails.length === 0){
+        //     leaveMessage = "No class members have leave plans today";
+        // }
 
         return(
             <div>
@@ -224,9 +235,11 @@ class PlanningDashboard extends Component{
                             <div className="broad-center-text">Planning Calendar</div>
                             <div className="lines-new lines-coordinate"></div>
                             <div className="new-div-border">
-                                <CustomDatePicker />
+                                <CustomDatePicker onClickLeave={this.displayLeaves}/>
                             </div>
-                            <div className="vertical-bar"></div>
+                            <div className="vertical-bar">
+                                {leaveMessage}
+                            </div>
                         </div>
                     </div>
                 </div>
