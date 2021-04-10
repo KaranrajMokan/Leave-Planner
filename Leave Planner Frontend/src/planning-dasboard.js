@@ -220,6 +220,7 @@ class PlanningDashboard extends Component{
                 }
                 leaveMessage.push(<div className="vb-bottom"><center>{personName}<br/>{dates}</center></div>)
             }
+            leaveMessage.push(<br></br>);
         }
 
         return(

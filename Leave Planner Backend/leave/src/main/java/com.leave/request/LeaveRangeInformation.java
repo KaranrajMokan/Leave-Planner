@@ -13,6 +13,8 @@ import java.time.LocalDate;
 public class LeaveRangeInformation {
 
     @Id
+    String leaveId;
+
     String name;
     LocalDate leaveStartDate;
     LocalDate leaveEndDate;

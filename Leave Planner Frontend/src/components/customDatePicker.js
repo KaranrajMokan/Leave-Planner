@@ -41,6 +41,7 @@ class CustomDatePicker extends Component{
         return(
             <div>
                 <Calendar 
+                selectRange={false}
                 onChange={this.onChange} value={this.state.value} minDate={new Date()}  view="month" 
                 minDetail="month" maxDetail="month"
                 showNeighboringMonth={false}
