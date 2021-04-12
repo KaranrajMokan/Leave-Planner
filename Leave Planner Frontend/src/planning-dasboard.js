@@ -200,12 +200,13 @@ class PlanningDashboard extends Component{
         
         if(this.state.leaveDetails.length === 0){
             leaveMessage=[]
-            leaveMessage.push(<div><div className="vb-top">{(this.state.currentDate+"").slice(4,10)}</div>
+            leaveMessage.push(<div><div className="vb-top"><center>{(this.state.currentDate+"").slice(4,10)}</center></div>
             <div className="vb-bottom">No class members have leave plans</div></div>);
         }
         else{
+            console.log(this.state.leaveDetails);
             leaveMessage=[]
-            leaveMessage.push(<div className="vb-top">{(this.state.currentDate+"").slice(4,10)}</div>);
+            leaveMessage.push(<div className="vb-top"><center>{(this.state.currentDate+"").slice(4,10)}</center></div>);
             for(var i=0;i<this.state.leaveDetails.length;i++){
                 var personName=this.state.leaveDetails[i].name;
                 var startDate=this.state.leaveDetails[i].leaveStartDate;

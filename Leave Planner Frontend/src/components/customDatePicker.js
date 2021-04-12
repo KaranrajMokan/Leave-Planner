@@ -15,10 +15,10 @@ class CustomDatePicker extends Component{
     }
 
     onChange(e){
-        console.log(e);
         this.setState({value:e});
         var date = new Date();
-        date.setDate(e.getDate());
+        date.setFullYear(e.getFullYear(),e.getMonth(),e.getDate());
+        console.log(date);
         const details = JSON.parse(localStorage.getItem("studentToken"));
         const requestParameters = {
             rollNumber : details.rollNumber,
