@@ -40,8 +40,8 @@ public class LeaveDetailsService {
         return leaveDetailsRepository.getLeaveById(leaveId);
     }
 
-    public List<LeaveRangeInformation> getLeavesByDate(String rollNumber, LocalDate date){
-        return leaveRangeRepository.getLeavesByDate(rollNumber,date);
+    public List<LeaveRangeInformation> getLeavesByDate(String rollNumber, LocalDate date, String classId){
+        return leaveRangeRepository.getLeavesByDate(rollNumber,date,classId);
     }
 }
 

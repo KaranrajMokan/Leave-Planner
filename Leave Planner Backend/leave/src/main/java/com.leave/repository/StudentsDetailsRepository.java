@@ -21,4 +21,7 @@ public interface StudentsDetailsRepository extends CrudRepository<StudentsDetail
     @Modifying
     @Query(value = "INSERT into students_details (rollno, name, email_id, class_id) VALUES (?1, ?2, ?3, ?4)", nativeQuery = true)
     int insertDetailsByRollNumber(String rollNumber, String name, String email, String classId);
+
+    @Query(value = "SELECT class_id from students_details s where s.rollno = ?1", nativeQuery = true)
+    String findClassIdByRollNumber(String rollNumber);
 }

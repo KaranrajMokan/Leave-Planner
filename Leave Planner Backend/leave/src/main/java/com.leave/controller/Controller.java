@@ -159,12 +159,13 @@ public class Controller {
 
 	@PostMapping("/leaves")
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<List<LeaveRangeInformation>> postLeaves(@RequestBody LeaveCountInformation leaveCountInformation){
+	public ResponseEntity<List<LeaveRangeInformation>> getLeavesRange(@RequestBody LeaveCountInformation leaveCountInformation){
 		String rollNumber = leaveCountInformation.getRollNumber();
+		String classId = studentsDetailsService.findClassIdByRollNumber(rollNumber);
 		String token = leaveCountInformation.getToken();
 		LocalDate date = leaveCountInformation.getDate();
 		jwtVerifier.verifier(secret,rollNumber,token);
-		List<LeaveRangeInformation> leaveRangeInformationList = leaveDetailsService.getLeavesByDate(rollNumber,date);
+		List<LeaveRangeInformation> leaveRangeInformationList = leaveDetailsService.getLeavesByDate(rollNumber,date,classId);
 		logger.info("Leave Details are found for the date "+date);
 		return ResponseEntity.status(HttpStatus.OK).body(leaveRangeInformationList);
 	}
