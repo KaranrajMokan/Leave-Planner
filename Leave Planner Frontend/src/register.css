@@ -1,0 +1,96 @@
+
+.regis-rect{
+    height: 725px;
+    width: 600px;
+    border-radius: 10px;
+    background: rgba(242, 240, 240, 1);
+    border: 3px solid rgba(221, 232, 236, 1);
+    position: relative;
+    margin-top: 4%;
+    left: 29%;
+}
+
+.title-reg{
+    position: relative;
+    font-family: 'Archivo';
+    font-style: normal;
+    font-weight: normal;
+    font-size: 30px;
+    line-height: 33px;
+    color: #10A6DC;
+    top: 3%;
+    text-align: center;
+}
+
+.lines-reg{
+    border: 2px solid rgba(229, 229, 229, 1);
+    position: relative;
+    left: 0%;
+    right: 0%;
+    top: 3%;
+}
+
+.font-sty{
+    font-family: 'Archivo';
+    font-size: 22px;
+    font-style: normal;
+    line-height: 25px;
+    letter-spacing: 0em;
+    text-align: center;
+    color:#000000;
+}
+
+.pos1{
+    position: relative;
+    margin-top: 6%;
+}
+
+.pos2{
+    position: relative;
+    margin-top: 2%;
+}
+
+.pos3{
+    position: relative;
+    margin-top: 1.5%;
+}
+
+.pos4{
+    position: relative;
+    top: 24%;
+}
+
+.pos5{
+    position: relative;
+    top: 30%;
+}
+
+
+.pad-reg{
+    position: relative;
+    padding-top: 0%;
+}
+
+.pad-button{
+    position: relative;
+    padding-top: 3.5%;
+}
+
+.loc{
+    position: relative;
+    padding-top: 5%;;
+}
+
+.boxy{
+    position: relative;
+    height: 44px;
+    width: 303px;
+    border-radius: 0px;
+    background: #F7F3F3;
+    border: 3px solid #E5E5E5;
+    margin-top: -1%;
+}
+
+.minimal{
+    font-size: 16px;
+}

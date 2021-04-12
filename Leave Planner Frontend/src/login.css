@@ -1,5 +1,5 @@
 .login-component{
-    height: 524px;
+    height: 550px;
     width: 536px;
     top: 150px;
     border-radius: 10px;
@@ -11,7 +11,7 @@
 
 .title-text{
     position: relative;
-    font-family: Archivo;
+    font-family: 'Archivo';
     font-style: normal;
     font-weight: normal;
     font-size: 30px;
@@ -41,12 +41,12 @@
 
 .position1{
     position: relative;
-    top: 18%;
+    top: 17%;
 }
 
 .position2{
     position: relative;
-    top: 30%;
+    top: 29%;
 }
 
 .box{
@@ -85,7 +85,7 @@
 }
 
 .but-text{
-    font-family: Archivo;
+    font-family: 'Archivo';
     font-style: normal;
     font-weight: normal;
     font-size: 22px;
@@ -93,4 +93,16 @@
     color: #000000;
     text-align: center;
     margin-top: 10px;
+}
+
+.regis{
+    font-family: 'Archivo';
+    font-size: 24px;
+    line-height: 27px;
+    color: #10A6DC;
+    margin-top: 35px;
+    margin-left: 130px;
+    text-decoration: underline;
+    font-style: oblique;
+    cursor: pointer;
 }

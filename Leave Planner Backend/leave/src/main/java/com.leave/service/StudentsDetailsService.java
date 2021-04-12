@@ -25,4 +25,8 @@ public class StudentsDetailsService {
     public String findNameByRollNumber(String rollNumber){
         return studentsDetailsRepository.findNameByRollNumber(rollNumber);
     }
+
+    public int insertDetailsByRollNumber(String rollNumber, String name, String email, String classId){
+        return studentsDetailsRepository.insertDetailsByRollNumber(rollNumber,name,email,classId);
+    }
 }

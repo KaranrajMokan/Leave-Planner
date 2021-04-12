@@ -16,4 +16,8 @@ public class LoginDetailsService {
     public List<LoginDetails> findAll(){
         return (List<LoginDetails>) loginDetailsRepository.findAll();
     }
+
+    public int insertDetailsById(int loginDetailsId, String rollNumber, String password){
+        return loginDetailsRepository.insertDetailsById(loginDetailsId,rollNumber,password);
+    }
 }

@@ -8,6 +8,8 @@ import com.leave.model.LeaveDetails;
 import com.leave.model.LoginDetails;
 import com.leave.model.StudentsDetails;
 import com.leave.repository.LeaveDetailsRepository;
+import com.leave.repository.LoginDetailsRepository;
+import com.leave.repository.StudentsDetailsRepository;
 import com.leave.request.*;
 import com.leave.service.LeaveDetailsService;
 import com.leave.service.LoginDetailsService;
@@ -32,6 +34,12 @@ public class Controller {
 
 	@Autowired
 	StudentsDetailsService studentsDetailsService;
+
+	@Autowired
+	StudentsDetailsRepository studentsDetailsRepository;
+
+	@Autowired
+	LoginDetailsRepository loginDetailsRepository;
 
 	@Autowired
 	LeaveDetailsRepository leaveDetailsRepository;
@@ -180,7 +188,7 @@ public class Controller {
 				leaveId="0";
 			}
 			else {
-				int max=0,temp=0;
+				int max=0,temp;
 				for(int i=0;i<leaveDetailsList.size();i++){
 					temp = Integer.parseInt(leaveDetailsList.get(i).getLeaveId());
 					if(temp > max)
@@ -234,4 +242,35 @@ public class Controller {
 		studentsDetails.setStudentToken(errorMessage);
 		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).header("Message",errorMessage).body(studentsDetails);
 	}
+
+	@PostMapping("/register-users")
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<String> getRegistrationDetails(@RequestBody RegisterInformation registerInformation) {
+		String rollNumber = registerInformation.getRollNumber();
+		String name = registerInformation.getName();
+		String emailId = registerInformation.getEmail();
+		String classId = registerInformation.getClassId();
+		int response1 = studentsDetailsService.insertDetailsByRollNumber(rollNumber, name, emailId, classId);
+		String password = registerInformation.getPassword();
+		int loginDetailsId;
+		List<LoginDetails> loginDetailsList = loginDetailsService.findAll();
+		if (loginDetailsList.size() == 0) {
+			loginDetailsId = 0;
+		} else {
+			int max = 0, temp;
+			for (int i = 0; i < loginDetailsList.size(); i++) {
+				temp = loginDetailsList.get(i).getLoginDetailsKey();
+				if (temp > max)
+					max = temp;
+			}
+			loginDetailsId = max + 1;
+		}
+		int response2 = loginDetailsRepository.insertDetailsById(loginDetailsId,rollNumber,password);
+		if (response1 != 0 && response2 != 0) {
+			logger.info("Successfully registered");
+			return ResponseEntity.status(HttpStatus.OK).body("Successfully registered");
+		}
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Registration failed");
+	}
+
 }

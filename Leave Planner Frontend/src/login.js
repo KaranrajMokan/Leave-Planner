@@ -4,7 +4,7 @@ import axios from 'axios';
 import logo from './images/LP-logo.png';
 
 import Toast from './components/toast';
-//import checkIcon from './images/check_icon.png';
+import checkIcon from './images/check_icon.png';
 import errorIcon from './images/error_icon.png';
 
 var toastMessage="";
@@ -55,6 +55,10 @@ class Login extends Component{
         e.preventDefault();
     }
 
+    register(){
+        window.location.href = '/register';
+    }
+
     render(){
         if(!this.state.value){
             if(this.state.errorMessage !== ""){
@@ -77,6 +81,20 @@ class Login extends Component{
                     description: "Your session has expired",
                     backgroundColor: '#d9534f',
                     icon: errorIcon
+                };
+                toaster = <Toast toast={toastMessage} page="login"/>;
+            }
+            window.history.replaceState(null, '');
+        }
+
+        if(typeof this.props.location.state !== 'undefined'){
+            if (this.props.location.state.registerData !== ""){
+                toastMessage =
+                {
+                    title: 'Success',
+                    description: this.props.location.state.registerData,
+                    backgroundColor: '#5cb85c',
+                    icon: checkIcon
                 };
                 toaster = <Toast toast={toastMessage} page="login"/>;
             }
@@ -110,6 +128,7 @@ class Login extends Component{
                                     <button type="submit" className="submit center"><p className="but-text">Login</p></button>
                                 </div>
                             </form>
+                            <div className="regis" onClick={this.register.bind(this)}>New user?</div>
                         </div>
                     </div>
                 </div>

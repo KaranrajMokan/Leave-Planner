@@ -14,7 +14,7 @@ public class LoginDetails {
 
     @Id
     @Column(name="login_details_key")
-    private String id;
+    private int loginDetailsKey;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="rollno")
