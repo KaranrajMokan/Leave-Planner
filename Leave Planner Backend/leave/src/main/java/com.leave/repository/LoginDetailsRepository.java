@@ -13,6 +13,12 @@ import javax.transaction.Transactional;
 public interface LoginDetailsRepository extends CrudRepository<LoginDetails, String> {
 
     @Modifying
-    @Query(value="INSERT into login_details (login_details_key, rollno, password) VALUES (?1, ?2, ?3)",nativeQuery = true)
+    @Query(value = "INSERT into login_details (login_details_key, rollno, password) VALUES (?1, ?2, ?3)", nativeQuery = true)
     int insertDetailsById(int loginDetailsId, String rollNumber, String password);
+
+    @Query(value = "SELECT password from login_details l where l.rollno = ?1", nativeQuery = true)
+    String getPasswordByRollNumber(String rollNumber);
+
+    @Query(value = "SELECT login_details_key from login_details l where l.rollno = ?1", nativeQuery = true)
+    int getLoginIdByRollNumber(String rollNumber);
 }

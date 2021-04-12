@@ -266,12 +266,38 @@ public class Controller {
 			}
 			loginDetailsId = max + 1;
 		}
-		int response2 = loginDetailsRepository.insertDetailsById(loginDetailsId,rollNumber,password);
+		int response2 = loginDetailsService.insertDetailsById(loginDetailsId,rollNumber,password);
 		if (response1 != 0 && response2 != 0) {
 			logger.info("Successfully registered");
 			return ResponseEntity.status(HttpStatus.OK).body("Successfully registered");
 		}
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Registration failed");
+	}
+
+	@PostMapping("/change-password")
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<String> postNewPassword(@RequestBody PasswordInformation passwordInformation) {
+		String rollNumber = passwordInformation.getRollNumber();
+		String token = passwordInformation.getToken();
+		jwtVerifier.verifier(secret,rollNumber,token);
+		String message="Current password is wrong";
+		String oldPassword = passwordInformation.getOldPassword();
+		String actualPassword = loginDetailsService.getPasswordByRollNumber(rollNumber);
+		if(oldPassword.equals(actualPassword)){
+			LoginDetails loginDetails = new LoginDetails();
+			int loginDetailsId = loginDetailsService.getLoginIdByRollNumber(rollNumber);
+			StudentsDetails studentsDetails = studentsDetailsService.findByRollNumber(rollNumber);
+			String newPassword = passwordInformation.getNewPassword();
+			loginDetails.setLoginDetailsKey(loginDetailsId);
+			loginDetails.setStudentsDetails(studentsDetails);
+			loginDetails.setPassword(newPassword);
+			loginDetailsRepository.save(loginDetails);
+			message="Password is changed successfully";
+			logger.info(message);
+			return ResponseEntity.status(HttpStatus.OK).body(message);
+		}
+		logger.info(message);
+		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(message);
 	}
 
 }

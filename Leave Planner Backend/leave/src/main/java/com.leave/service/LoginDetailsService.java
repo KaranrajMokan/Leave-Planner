@@ -20,4 +20,12 @@ public class LoginDetailsService {
     public int insertDetailsById(int loginDetailsId, String rollNumber, String password){
         return loginDetailsRepository.insertDetailsById(loginDetailsId,rollNumber,password);
     }
+
+    public String getPasswordByRollNumber(String rollNumber){
+        return loginDetailsRepository.getPasswordByRollNumber(rollNumber);
+    }
+
+    public int getLoginIdByRollNumber(String rollNumber){
+        return loginDetailsRepository.getLoginIdByRollNumber(rollNumber);
+    }
 }
