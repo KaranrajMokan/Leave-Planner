@@ -9,6 +9,7 @@ import com.leave.model.LoginDetails;
 import com.leave.model.StudentsDetails;
 import com.leave.repository.LeaveDetailsRepository;
 import com.leave.repository.LoginDetailsRepository;
+import com.leave.repository.PasswordResetTokenRepository;
 import com.leave.repository.StudentsDetailsRepository;
 import com.leave.request.*;
 import com.leave.service.LeaveDetailsService;
@@ -23,8 +24,10 @@ import org.springframework.web.bind.annotation.*;
 import javax.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 
@@ -37,6 +40,9 @@ public class Controller {
 
     @Autowired
     StudentsDetailsRepository studentsDetailsRepository;
+
+    @Autowired
+    PasswordResetTokenRepository passwordResetTokenRepository;
 
     @Autowired
     LoginDetailsRepository loginDetailsRepository;
@@ -296,6 +302,22 @@ public class Controller {
         }
         logger.info(message);
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(message);
+    }
+
+    @PostMapping("/forgot-password")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<String> postForgotToken(@RequestBody String rollNumber) {
+        StudentsDetails studentsDetails = studentsDetailsService.findByRollNumber(rollNumber);
+        if(studentsDetails != null){
+            String token = UUID.randomUUID().toString();
+            PasswordResetTokenInformation passwordResetTokenInformation = new PasswordResetTokenInformation();
+            passwordResetTokenInformation.setStudentsDetails(studentsDetails);
+            passwordResetTokenInformation.setToken(token);
+            passwordResetTokenInformation.setExpiryTime(LocalDateTime.now().plusHours(1));
+            passwordResetTokenRepository.save(passwordResetTokenInformation);
+            return ResponseEntity.status(HttpStatus.OK).body("Successfully token sent to mail");
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Incorrect roll number");
     }
 
 }
