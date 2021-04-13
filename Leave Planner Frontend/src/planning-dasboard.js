@@ -38,6 +38,7 @@ class PlanningDashboard extends Component{
         this.logoutFunction = this.logoutFunction.bind(this);
         this.setEndLimit = this.setEndLimit.bind(this);
         this.displayLeaves = this.displayLeaves.bind(this);
+        this.changePassword = this.changePassword.bind(this);
     }
 
     componentDidMount(){
@@ -153,6 +154,10 @@ class PlanningDashboard extends Component{
         this.setState({currentDate:date});
     }
 
+    changePassword(){
+        window.location.href = '/reset-password';
+    }
+
     render(){
         const {leaveType} = this.state;
         const leaves = [
@@ -229,7 +234,12 @@ class PlanningDashboard extends Component{
                 {toaster}
                 <img className="image-div" src={Logo} alt=""></img>
                 <div className="app-lines"></div>
-                <div><NavBar />{displayName}<button className="logout-but end-texts" onClick={this.logoutFunction}>LOGOUT</button></div>
+                <div>
+                    <NavBar />
+                    {displayName}
+                    <button className="logout-but button-texts" onClick={this.logoutFunction}>LOGOUT</button>
+                    <button className="pass-but button-texts" onClick={this.changePassword}>CHANGE PWD</button>
+                </div>
                 <div className="line-div">
                     <div className="inner-div">
                         <div className="rectangle"> 

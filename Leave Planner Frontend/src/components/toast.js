@@ -26,6 +26,9 @@ class Toast extends Component{
         else if (this.state.page === "register"){
             window.location.href = '/register';
         }
+        else if (this.state.page === "reset-password"){
+            window.location.href = '/reset-password';
+        }
     }
 
     render(){

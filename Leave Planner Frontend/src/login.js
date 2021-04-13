@@ -100,6 +100,20 @@ class Login extends Component{
             }
             window.history.replaceState(null, '');
         }
+
+        if(typeof this.props.location.state !== 'undefined'){
+            if (this.props.location.state.resetData !== ""){
+                toastMessage =
+                {
+                    title: 'Success',
+                    description: this.props.location.state.resetData,
+                    backgroundColor: '#5cb85c',
+                    icon: checkIcon
+                };
+                toaster = <Toast toast={toastMessage} page="login"/>;
+            }
+            window.history.replaceState(null, '');
+        }
         return(
             <div>
                 {toaster}

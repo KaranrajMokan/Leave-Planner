@@ -25,6 +25,7 @@ class LeavesDashboard extends Component{
         this.computeAndDisplayPastLeaves = this.computeAndDisplayPastLeaves.bind(this);
         this.handleEditLeaves = this.handleEditLeaves.bind(this);
         this.handleDeleteLeaves = this.handleDeleteLeaves.bind(this);
+        this.changePassword = this.changePassword.bind(this);
         this.state = {
             upcomingLeaveData : "",
             pastLeaveData : "",
@@ -240,6 +241,10 @@ class LeavesDashboard extends Component{
         }
     }
 
+    changePassword(){
+        window.location.href = '/reset-password';
+    }
+
     render(){
         const halfName = "Hello, "+JSON.parse(localStorage.getItem("studentToken")).name;
         const displayName = <div className="positions end-texts">{halfName}</div>;
@@ -260,7 +265,12 @@ class LeavesDashboard extends Component{
             {toaster}
             <img className="image-div" src={Logo} alt=""></img>
                 <div className="app-lines change-speed"></div>
-                <div><NavBar />{displayName}<button className="logout-but end-texts" onClick={this.logoutFunction}>LOGOUT</button></div>
+                <div>
+                    <NavBar />
+                    {displayName}
+                    <button className="logout-but button-texts" onClick={this.logoutFunction}>LOGOUT</button>
+                    <button className="pass-but button-texts" onClick={this.changePassword}>CHANGE PWD</button>
+                </div>
                 <div className="line-div">
                     <div className="inner-div">
                         <div className="leaves-rectangle1"> 

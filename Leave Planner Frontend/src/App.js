@@ -7,6 +7,7 @@ import Login from './login';
 import PlanningDashboard from './planning-dasboard';
 import LeavesDashboard from './leaves-dashboard';
 import Register from './register';
+import ResetPassword from './reset-password';
 
 class App extends Component {
 
@@ -41,6 +42,7 @@ class App extends Component {
           <Switch>
             <Route path="/" exact render={props=><Login {...props}/>}/>
             <Route path="/register" exact render={props=><Register {...props}/>}/>
+            <Route path="/reset-password" exact render={props=><ResetPassword {...props}/>}/>
             <Route path="/planning-dashboard" exact render={props=><PlanningDashboard {...props}/>}/>
             <Route path="/leaves-dashboard" exact render={props=><LeavesDashboard {...props}/>}/>
           </Switch> 
