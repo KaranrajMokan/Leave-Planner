@@ -59,6 +59,10 @@ class Login extends Component{
         window.location.href = '/register';
     }
 
+    forgotPassword(){
+        console.log("fuckyou");
+    }
+
     render(){
         if(!this.state.value){
             if(this.state.errorMessage !== ""){
@@ -143,6 +147,7 @@ class Login extends Component{
                                 </div>
                             </form>
                             <div className="regis" onClick={this.register.bind(this)}>New user?</div>
+                            <div className="regis position3" onClick={this.forgotPassword.bind(this)}>Forgot password?</div>
                         </div>
                     </div>
                 </div>

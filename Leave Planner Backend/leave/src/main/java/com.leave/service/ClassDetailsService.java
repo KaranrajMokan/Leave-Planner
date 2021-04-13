@@ -11,7 +11,7 @@ public class ClassDetailsService {
     @Autowired
     public ClassDetailsRepository classDetailsRepository;
 
-    public List<ClassDetails> findAll(){
+    public List<ClassDetails> findAll() {
         return (List<ClassDetails>) classDetailsRepository.findAll();
     }
 

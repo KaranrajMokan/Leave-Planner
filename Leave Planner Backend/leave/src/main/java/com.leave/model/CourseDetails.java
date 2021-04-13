@@ -9,22 +9,22 @@ import java.util.Objects;
 @Getter
 @Setter
 @Entity
-@Table(name="course_details")
+@Table(name = "course_details")
 public class CourseDetails {
 
     @Id
-    @Column(name="course_details_key")
+    @Column(name = "course_details_key")
     private String id;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="rollno")
+    @JoinColumn(name = "rollno")
     private StudentsDetails studentsDetails;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="course_id")
+    @JoinColumn(name = "course_id")
     private Course course;
 
-    public CourseDetails(){
+    public CourseDetails() {
 
     }
 

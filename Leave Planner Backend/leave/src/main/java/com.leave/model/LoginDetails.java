@@ -9,21 +9,21 @@ import java.util.Objects;
 @Getter
 @Setter
 @Entity
-@Table(name="login_details")
+@Table(name = "login_details")
 public class LoginDetails {
 
     @Id
-    @Column(name="login_details_key")
+    @Column(name = "login_details_key")
     private int loginDetailsKey;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="rollno")
+    @JoinColumn(name = "rollno")
     private StudentsDetails studentsDetails;
 
-    @Column(name="password")
+    @Column(name = "password")
     private String password;
 
-    public LoginDetails(){
+    public LoginDetails() {
 
     }
 

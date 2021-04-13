@@ -13,23 +13,23 @@ import java.util.Objects;
 public class TimetableDetails {
 
     @Id
-    @Column(name="timetable_details_key")
+    @Column(name = "timetable_details_key")
     private String id;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="timetable_id")
+    @JoinColumn(name = "timetable_id")
     private Timetable timetable;
 
-    @Column(name="day")
+    @Column(name = "day")
     private String day;
 
-    @Column(name="duration")
+    @Column(name = "duration")
     private String duration;
 
-    @Column(name="course_id")
+    @Column(name = "course_id")
     private String courseId;
 
-    public TimetableDetails(){
+    public TimetableDetails() {
 
     }
 

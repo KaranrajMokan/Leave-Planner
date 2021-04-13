@@ -12,21 +12,21 @@ import java.util.Objects;
 @Getter
 @Setter
 @Entity
-@Table(name="course")
+@Table(name = "course")
 public class Course {
 
     @Id
-    @Column(name="course_id")
+    @Column(name = "course_id")
     private String courseId;
 
-    @Column(name="course_name")
+    @Column(name = "course_name")
     private String courseName;
 
-    @Column(name="faculty_name")
+    @Column(name = "faculty_name")
     private String facultyName;
-    
-    public Course(){
-        
+
+    public Course() {
+
     }
 
     @Override

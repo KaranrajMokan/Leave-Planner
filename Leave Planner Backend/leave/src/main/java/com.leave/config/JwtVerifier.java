@@ -13,13 +13,12 @@ public class JwtVerifier {
     Algorithm algorithm;
     Logger logger = Logger.getLogger(Logger.class.getName());
 
-    public void verifier(String secret, String rollNumber, String token){
+    public void verifier(String secret, String rollNumber, String token) {
         try {
             algorithm = Algorithm.HMAC256(secret);
             JWTVerifier verifier = JWT.require(algorithm).withIssuer(rollNumber).build();
             DecodedJWT jwt = verifier.verify(token);
-            //logger.info(jwt.toString());
-        } catch (JWTVerificationException exception){
+        } catch (JWTVerificationException exception) {
             logger.info("Error verifying JWT tokens");
         }
     }

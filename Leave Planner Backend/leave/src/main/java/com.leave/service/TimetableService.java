@@ -14,7 +14,7 @@ public class TimetableService {
     @Autowired
     public TimetableRepository timetableRepository;
 
-    public List<Timetable> findAll(){
+    public List<Timetable> findAll() {
         return (List<Timetable>) timetableRepository.findAll();
     }
 }

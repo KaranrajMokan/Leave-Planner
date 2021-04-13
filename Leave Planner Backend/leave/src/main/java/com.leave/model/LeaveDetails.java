@@ -11,29 +11,29 @@ import java.util.Objects;
 @Setter
 @Entity
 @Table(name = "leave_details")
-public class LeaveDetails implements Comparable<LeaveDetails>{
+public class LeaveDetails implements Comparable<LeaveDetails> {
 
     @Id
-    @Column(name="leave_id")
+    @Column(name = "leave_id")
     private String leaveId;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="rollno")
+    @JoinColumn(name = "rollno")
     private StudentsDetails studentsDetails;
 
-    @Column(name="leave_start_date")
+    @Column(name = "leave_start_date")
     private LocalDate leaveStartDate;
 
-    @Column(name="leave_end_date")
+    @Column(name = "leave_end_date")
     private LocalDate leaveEndDate;
 
-    @Column(name="leave_duration")
+    @Column(name = "leave_duration")
     private int leaveDuration;
 
-    @Column(name="leave_type")
+    @Column(name = "leave_type")
     private String leaveType;
 
-    public LeaveDetails(){
+    public LeaveDetails() {
 
     }
 

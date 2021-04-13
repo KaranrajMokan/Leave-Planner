@@ -11,11 +11,11 @@ public class JwtCreator {
     Algorithm algorithm;
     Logger logger = Logger.getLogger(Logger.class.getName());
 
-    public String creator(String secret, String rollNumber){
+    public String creator(String secret, String rollNumber) {
         try {
             algorithm = Algorithm.HMAC256(secret);
             return JWT.create().withIssuer(rollNumber).sign(algorithm);
-        } catch (JWTCreationException exception){
+        } catch (JWTCreationException exception) {
             logger.info("Error creating JWT tokens");
         }
         return "";

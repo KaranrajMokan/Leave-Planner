@@ -16,21 +16,21 @@ import java.util.Objects;
 public class StudentsDetails {
 
     @Id
-    @Column(name="rollno")
+    @Column(name = "rollno")
     private String rollNumber;
 
-    @Column(name="name")
+    @Column(name = "name")
     private String name;
 
-    @Column(name="email_id")
+    @Column(name = "email_id")
     private String emailId;
 
-    @Column(name="class_id")
+    @Column(name = "class_id")
     private String classId;
 
     private String studentToken;
 
-    public StudentsDetails(){
+    public StudentsDetails() {
 
     }
 

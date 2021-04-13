@@ -13,19 +13,19 @@ public class LoginDetailsService {
     @Autowired
     public LoginDetailsRepository loginDetailsRepository;
 
-    public List<LoginDetails> findAll(){
+    public List<LoginDetails> findAll() {
         return (List<LoginDetails>) loginDetailsRepository.findAll();
     }
 
-    public int insertDetailsById(int loginDetailsId, String rollNumber, String password){
-        return loginDetailsRepository.insertDetailsById(loginDetailsId,rollNumber,password);
+    public int insertDetailsById(int loginDetailsId, String rollNumber, String password) {
+        return loginDetailsRepository.insertDetailsById(loginDetailsId, rollNumber, password);
     }
 
-    public String getPasswordByRollNumber(String rollNumber){
+    public String getPasswordByRollNumber(String rollNumber) {
         return loginDetailsRepository.getPasswordByRollNumber(rollNumber);
     }
 
-    public int getLoginIdByRollNumber(String rollNumber){
+    public int getLoginIdByRollNumber(String rollNumber) {
         return loginDetailsRepository.getLoginIdByRollNumber(rollNumber);
     }
 }

@@ -101,8 +101,14 @@
     line-height: 27px;
     color: #10A6DC;
     margin-top: 35px;
-    margin-left: 130px;
+    margin-left: 117px;
     text-decoration: underline;
     font-style: oblique;
     cursor: pointer;
+}
+
+.position3{
+    position: relative;
+    top: -11.5%;
+    left: 25%;
 }

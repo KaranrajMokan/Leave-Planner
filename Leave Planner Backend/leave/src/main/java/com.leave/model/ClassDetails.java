@@ -16,16 +16,16 @@ import java.util.Objects;
 public class ClassDetails {
 
     @Id
-    @Column(name="class_id")
+    @Column(name = "class_id")
     private String classId;
 
-    @Column(name="tutor_name")
+    @Column(name = "tutor_name")
     private String tutorName;
 
-    @Column(name="tutor_email")
+    @Column(name = "tutor_email")
     private String tutorEmail;
 
-    public ClassDetails(){
+    public ClassDetails() {
 
     }
 

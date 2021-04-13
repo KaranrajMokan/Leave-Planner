@@ -16,13 +16,13 @@ import java.util.Objects;
 public class Timetable {
 
     @Id
-    @Column(name="timetable_id")
+    @Column(name = "timetable_id")
     private String timetableId;
 
-    @Column(name="class_id")
+    @Column(name = "class_id")
     private String classId;
 
-    public Timetable(){
+    public Timetable() {
 
     }
 

@@ -14,23 +14,23 @@ public class StudentsDetailsService {
     @Autowired
     public StudentsDetailsRepository studentsDetailsRepository;
 
-    public List<StudentsDetails> findAll(){
+    public List<StudentsDetails> findAll() {
         return (List<StudentsDetails>) studentsDetailsRepository.findAll();
     }
 
-    public StudentsDetails findByRollNumber(String rollNumber){
+    public StudentsDetails findByRollNumber(String rollNumber) {
         return studentsDetailsRepository.findByRollNumber(rollNumber);
     }
 
-    public String findNameByRollNumber(String rollNumber){
+    public String findNameByRollNumber(String rollNumber) {
         return studentsDetailsRepository.findNameByRollNumber(rollNumber);
     }
 
-    public int insertDetailsByRollNumber(String rollNumber, String name, String email, String classId){
-        return studentsDetailsRepository.insertDetailsByRollNumber(rollNumber,name,email,classId);
+    public int insertDetailsByRollNumber(String rollNumber, String name, String email, String classId) {
+        return studentsDetailsRepository.insertDetailsByRollNumber(rollNumber, name, email, classId);
     }
 
-    public String findClassIdByRollNumber(String rollNumber){
+    public String findClassIdByRollNumber(String rollNumber) {
         return studentsDetailsRepository.findClassIdByRollNumber(rollNumber);
     }
 }

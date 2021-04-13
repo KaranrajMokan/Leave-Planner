@@ -7,7 +7,7 @@ import org.springframework.data.repository.CrudRepository;
 import java.time.LocalDate;
 import java.util.List;
 
-public interface LeaveRangeRepository extends CrudRepository<LeaveRangeInformation,String> {
+public interface LeaveRangeRepository extends CrudRepository<LeaveRangeInformation, String> {
 
     @Query(value = "SELECT ld.leave_id, sd.name, ld.leave_start_date, ld.leave_end_date from leave_details ld join students_details sd on ld.rollno = sd.rollno " +
             "where sd.rollno <> ?1 and ld.leave_start_date <= ?2 and ld.leave_end_date >= ?2 and sd.class_id = ?3", nativeQuery = true)

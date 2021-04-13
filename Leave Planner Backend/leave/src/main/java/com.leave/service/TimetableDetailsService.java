@@ -13,7 +13,7 @@ public class TimetableDetailsService {
     @Autowired
     public TimetableDetailsRepository timetableDetailsRepository;
 
-    public List<TimetableDetails> findAll(){
+    public List<TimetableDetails> findAll() {
         return (List<TimetableDetails>) timetableDetailsRepository.findAll();
     }
 }

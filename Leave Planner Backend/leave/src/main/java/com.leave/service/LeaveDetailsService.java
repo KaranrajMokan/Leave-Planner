@@ -20,28 +20,28 @@ public class LeaveDetailsService {
     @Autowired
     public LeaveRangeRepository leaveRangeRepository;
 
-    public List<LeaveDetails> findAll(){
+    public List<LeaveDetails> findAll() {
         return (List<LeaveDetails>) leaveDetailsRepository.findAll();
     }
 
-    public List<LeaveDetails> findUpcomingLeavesByRollNumber(String rollNumber){
-        return leaveDetailsRepository.findUpcomingLeaves(rollNumber,Date.valueOf(LocalDate.now()));
+    public List<LeaveDetails> findUpcomingLeavesByRollNumber(String rollNumber) {
+        return leaveDetailsRepository.findUpcomingLeaves(rollNumber, Date.valueOf(LocalDate.now()));
     }
 
-    public List<LeaveDetails> findPastLeavesByRollNumber(String rollNumber){
-        return leaveDetailsRepository.findPastLeaves(rollNumber,Date.valueOf(LocalDate.now()));
+    public List<LeaveDetails> findPastLeavesByRollNumber(String rollNumber) {
+        return leaveDetailsRepository.findPastLeaves(rollNumber, Date.valueOf(LocalDate.now()));
     }
 
-    public int deleteLeavesByLeaveId(String leaveId){
+    public int deleteLeavesByLeaveId(String leaveId) {
         return leaveDetailsRepository.deleteLeavesById(leaveId);
     }
 
-    public LeaveDetails getLeaveById(String leaveId){
+    public LeaveDetails getLeaveById(String leaveId) {
         return leaveDetailsRepository.getLeaveById(leaveId);
     }
 
-    public List<LeaveRangeInformation> getLeavesByDate(String rollNumber, LocalDate date, String classId){
-        return leaveRangeRepository.getLeavesByDate(rollNumber,date,classId);
+    public List<LeaveRangeInformation> getLeavesByDate(String rollNumber, LocalDate date, String classId) {
+        return leaveRangeRepository.getLeavesByDate(rollNumber, date, classId);
     }
 }
 

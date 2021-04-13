@@ -13,7 +13,7 @@ public class CourseDetailsService {
     @Autowired
     public CourseDetailsRepository courseDetailsRepository;
 
-    public List<CourseDetails> findAll(){
+    public List<CourseDetails> findAll() {
         return (List<CourseDetails>) courseDetailsRepository.findAll();
     }
 }
