@@ -28,4 +28,8 @@ public class LoginDetailsService {
     public int getLoginIdByRollNumber(String rollNumber) {
         return loginDetailsRepository.getLoginIdByRollNumber(rollNumber);
     }
+
+    public LoginDetails getLoginDetailsByRollNumber(String rollNumber){
+        return loginDetailsRepository.getLoginDetailsByRollNumber(rollNumber);
+    }
 }

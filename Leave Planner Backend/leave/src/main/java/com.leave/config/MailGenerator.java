@@ -12,7 +12,7 @@ import java.util.Properties;
 
 public class MailGenerator {
 
-    public static void sendMails(String senderMail, String senderPassword, String recipientMail, String name, String rollNumber, String leaveType, LocalDate startDate, LocalDate endDate, int duration, boolean isUpdated, String updatedLeaveType, LocalDate updatedStartDate, LocalDate updatedEndDate, int updatedDuration) throws MessagingException {
+    public static void sendMails(String senderMail, String senderPassword, String recipientMail, String name, String rollNumber, String leaveType, LocalDate startDate, LocalDate endDate, int duration, boolean isUpdated, String updatedLeaveType, LocalDate updatedStartDate, LocalDate updatedEndDate, int updatedDuration, boolean isTokenMail, String token) throws MessagingException {
 
         Properties prop = new Properties();
         prop.setProperty("mail.smtp.auth", "true");
@@ -26,10 +26,14 @@ public class MailGenerator {
         });
         session.setDebug(true);
         Message message;
-        if (isUpdated) {
-            message = createUpdatedMessage(session, senderMail, recipientMail, name, rollNumber, leaveType, startDate, endDate, duration, updatedLeaveType, updatedStartDate, updatedEndDate, updatedDuration);
+        if (isTokenMail) {
+            message = createTokenMessage(session, senderMail, recipientMail, name, rollNumber, token);
         } else {
-            message = createMessage(session, senderMail, recipientMail, name, rollNumber, leaveType, startDate, endDate, duration);
+            if (isUpdated) {
+                message = createUpdatedMessage(session, senderMail, recipientMail, name, rollNumber, leaveType, startDate, endDate, duration, updatedLeaveType, updatedStartDate, updatedEndDate, updatedDuration);
+            } else {
+                message = createMessage(session, senderMail, recipientMail, name, rollNumber, leaveType, startDate, endDate, duration);
+            }
         }
         Transport.send(message);
     }
@@ -77,5 +81,20 @@ public class MailGenerator {
         message.setContent(messageContent, "text/plain");
         message.saveChanges();
         return message;
+    }
+
+    private static Message createTokenMessage(Session session, String senderMail, String recipientMail, String name, String rollNumber, String token) throws MessagingException {
+        MimeMessage message = new MimeMessage(session);
+        message.setFrom(new InternetAddress(senderMail));
+        message.setRecipient(Message.RecipientType.TO, new InternetAddress(recipientMail));
+        String messageSubject = "[Reset Password] " + name + " has attempted to reset the password ";
+        String messageContent = "Hello! <br> You (" + name + " - " + rollNumber
+                + ") have requested for resetting the password.<br>The below token will expire in <b style='font-size:18px;'>1 hour</b> <br><br> The token is    <b style='font-size:18px;'>"
+                + token + "</b>";
+        message.setSubject(messageSubject);
+        message.setContent(messageContent, "text/html; charset=utf-8");
+        message.saveChanges();
+        return message;
+
     }
 }

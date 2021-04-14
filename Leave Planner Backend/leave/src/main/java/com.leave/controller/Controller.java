@@ -134,7 +134,7 @@ public class Controller {
             if (!updateInformation.getEmailId().equals("")) {
                 String[] listOfEmails = updateInformation.getEmailId().split(",");
                 for (String listOfEmail : listOfEmails) {
-                    MailGenerator.sendMails(senderMail, senderPassword, listOfEmail, name, rollNumber, oldLeaveType, oldStartDate, oldEndDate, oldDuration, true, leaveType, startDate, endDate, duration);
+                    MailGenerator.sendMails(senderMail, senderPassword, listOfEmail, name, rollNumber, oldLeaveType, oldStartDate, oldEndDate, oldDuration, true, leaveType, startDate, endDate, duration, false, null);
                 }
             }
             responseMessage = "Leave is updated successfully";
@@ -212,7 +212,7 @@ public class Controller {
             if (!leaveInformation.getEmailId().equals("")) {
                 String[] listOfEmails = leaveInformation.getEmailId().split(",");
                 for (String listOfEmail : listOfEmails) {
-                    MailGenerator.sendMails(senderMail, senderPassword, listOfEmail, name, rollNumber, leaveInformation.getLeaveType(), startDate, endDate, duration, false, null, null, null, 0);
+                    MailGenerator.sendMails(senderMail, senderPassword, listOfEmail, name, rollNumber, leaveInformation.getLeaveType(), startDate, endDate, duration, false, null, null, null, 0, false, null);
                 }
             }
             message = "Leave is planned successfully";
@@ -306,7 +306,7 @@ public class Controller {
 
     @PostMapping("/forgot-password")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<String> postForgotToken(@RequestBody String rollNumber) {
+    public ResponseEntity<String> postForgotToken(@RequestBody String rollNumber) throws MessagingException {
         StudentsDetails studentsDetails = studentsDetailsService.findByRollNumber(rollNumber);
         if(studentsDetails != null){
             String token = UUID.randomUUID().toString();
@@ -315,9 +315,41 @@ public class Controller {
             passwordResetTokenInformation.setToken(token);
             passwordResetTokenInformation.setExpiryTime(LocalDateTime.now().plusHours(1));
             passwordResetTokenRepository.save(passwordResetTokenInformation);
+            MailGenerator.sendMails(senderMail, senderPassword, studentsDetails.getEmailId(), studentsDetails.getName(), studentsDetails.getRollNumber(), null,  null, null, 0, false, null, null, null, 0, true, token);
+            logger.info("Successfully token sent to mail");
             return ResponseEntity.status(HttpStatus.OK).body("Successfully token sent to mail");
         }
+        logger.info("Incorrect password");
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Incorrect roll number");
+    }
+
+    @GetMapping("/validate-token")
+    ResponseEntity<String> validateToken(@RequestBody String token){
+        PasswordResetTokenInformation passwordResetTokenInformation = passwordResetTokenRepository.getPasswordResetInformationByToken(token);
+        if (passwordResetTokenInformation != null){
+            if(passwordResetTokenInformation.getExpiryTime().isAfter(LocalDateTime.now())){
+                logger.info("Token is validated successfully");
+                return ResponseEntity.status(HttpStatus.OK).body("Token is validated successfully");
+            }
+            logger.info("Token expired");
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("Token expired");
+        }
+        logger.info("Invalid Token");
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Token");
+    }
+
+    @PostMapping("/save-password")
+    ResponseEntity<String> postNewPassword(@RequestBody LoginInformation loginInformation){
+        String rollNumber = loginInformation.getRollno();
+        LoginDetails oldLoginDetails = loginDetailsService.getLoginDetailsByRollNumber(rollNumber);
+        StudentsDetails studentsDetails = studentsDetailsService.findByRollNumber(rollNumber);
+        LoginDetails newLoginDetails = new LoginDetails();
+        newLoginDetails.setLoginDetailsKey(oldLoginDetails.getLoginDetailsKey());
+        newLoginDetails.setStudentsDetails(studentsDetails);
+        newLoginDetails.setPassword(loginInformation.getPassword());
+        loginDetailsRepository.save(newLoginDetails);
+        logger.info("Password is reset successfully");
+        return ResponseEntity.status(HttpStatus.OK).body("Password is reset successfully");
     }
 
 }

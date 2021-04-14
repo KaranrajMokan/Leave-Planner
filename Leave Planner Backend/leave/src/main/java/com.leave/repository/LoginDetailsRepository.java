@@ -21,4 +21,7 @@ public interface LoginDetailsRepository extends CrudRepository<LoginDetails, Str
 
     @Query(value = "SELECT login_details_key from login_details l where l.rollno = ?1", nativeQuery = true)
     int getLoginIdByRollNumber(String rollNumber);
+
+    @Query(value = "SELECT * from login_details l where l.rollno = ?1", nativeQuery = true)
+    LoginDetails getLoginDetailsByRollNumber(String rollNumber);
 }
