@@ -60,7 +60,7 @@ class Login extends Component{
     }
 
     forgotPassword(){
-        console.log("fuckyou");
+        window.location.href = '/forgot-password';
     }
 
     render(){
@@ -118,6 +118,21 @@ class Login extends Component{
             }
             window.history.replaceState(null, '');
         }
+
+        if(typeof this.props.location.state !== 'undefined'){
+            if (this.props.location.state.savePasswordMessage !== ""){
+                toastMessage =
+                {
+                    title: 'Success',
+                    description: this.props.location.state.savePasswordMessage,
+                    backgroundColor: '#5cb85c',
+                    icon: checkIcon
+                };
+                toaster = <Toast toast={toastMessage} page="login"/>;
+            }
+            window.history.replaceState(null, '');
+        }
+
         return(
             <div>
                 {toaster}

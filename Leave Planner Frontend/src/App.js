@@ -8,6 +8,9 @@ import PlanningDashboard from './planning-dasboard';
 import LeavesDashboard from './leaves-dashboard';
 import Register from './register';
 import ResetPassword from './reset-password';
+import ForgotPassword from './forgot-password';
+import ValidateToken from './validate-token';
+import SavePassword from './save-password';
 
 class App extends Component {
 
@@ -43,6 +46,9 @@ class App extends Component {
             <Route path="/" exact render={props=><Login {...props}/>}/>
             <Route path="/register" exact render={props=><Register {...props}/>}/>
             <Route path="/reset-password" exact render={props=><ResetPassword {...props}/>}/>
+            <Route path="/forgot-password" exact render={props=><ForgotPassword {...props}/>}/>
+            <Route path="/validate-token" exact render={props=><ValidateToken {...props}/>}/>
+            <Route path="/save-password" exact render={props=><SavePassword {...props}/>}/>
             <Route path="/planning-dashboard" exact render={props=><PlanningDashboard {...props}/>}/>
             <Route path="/leaves-dashboard" exact render={props=><LeavesDashboard {...props}/>}/>
           </Switch> 
