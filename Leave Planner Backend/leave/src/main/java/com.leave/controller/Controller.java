@@ -306,7 +306,7 @@ public class Controller {
 
     @PostMapping("/forgot-password")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<String> postForgotToken(@RequestBody String rollNumber) throws MessagingException {
+    public ResponseEntity<String> postForgotToken(@RequestParam String rollNumber) throws MessagingException {
         StudentsDetails studentsDetails = studentsDetailsService.findByRollNumber(rollNumber);
         if(studentsDetails != null){
             String token = UUID.randomUUID().toString();
@@ -316,20 +316,20 @@ public class Controller {
             passwordResetTokenInformation.setExpiryTime(LocalDateTime.now().plusHours(1));
             passwordResetTokenRepository.save(passwordResetTokenInformation);
             MailGenerator.sendMails(senderMail, senderPassword, studentsDetails.getEmailId(), studentsDetails.getName(), studentsDetails.getRollNumber(), null,  null, null, 0, false, null, null, null, 0, true, token);
-            logger.info("Successfully token sent to mail");
-            return ResponseEntity.status(HttpStatus.OK).body("Successfully token sent to mail");
+            logger.info("Token is sent to mail successfully");
+            return ResponseEntity.status(HttpStatus.OK).body("Token is sent to mail successfully");
         }
-        logger.info("Incorrect password");
+        logger.info("Incorrect roll number");
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Incorrect roll number");
     }
 
     @GetMapping("/validate-token")
-    ResponseEntity<String> validateToken(@RequestBody String token){
+    ResponseEntity<String> validateToken(@RequestParam String token){
         PasswordResetTokenInformation passwordResetTokenInformation = passwordResetTokenRepository.getPasswordResetInformationByToken(token);
         if (passwordResetTokenInformation != null){
             if(passwordResetTokenInformation.getExpiryTime().isAfter(LocalDateTime.now())){
-                logger.info("Token is validated successfully");
-                return ResponseEntity.status(HttpStatus.OK).body("Token is validated successfully");
+                logger.info("Token is validated successfully for "+passwordResetTokenInformation.getStudentsDetails().getRollNumber());
+                return ResponseEntity.status(HttpStatus.OK).body("Token is validated successfullyfor"+passwordResetTokenInformation.getStudentsDetails().getRollNumber());
             }
             logger.info("Token expired");
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("Token expired");
