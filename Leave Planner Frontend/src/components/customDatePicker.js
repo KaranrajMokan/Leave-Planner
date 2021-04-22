@@ -6,6 +6,10 @@ import axios from 'axios';
 var FontAwesome = require('react-fontawesome');
 class CustomDatePicker extends Component{
     
+    componentDidMount(){
+        this.onChange(new Date());
+    }
+
     constructor(props){
         super(props);
         this.state={

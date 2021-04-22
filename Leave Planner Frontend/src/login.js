@@ -88,11 +88,7 @@ class Login extends Component{
                 };
                 toaster = <Toast toast={toastMessage} page="login"/>;
             }
-            window.history.replaceState(null, '');
-        }
-
-        if(typeof this.props.location.state !== 'undefined'){
-            if (this.props.location.state.registerData !== ""){
+            else if (typeof this.props.location.state.registerData !== 'undefined'){
                 toastMessage =
                 {
                     title: 'Success',
@@ -102,11 +98,7 @@ class Login extends Component{
                 };
                 toaster = <Toast toast={toastMessage} page="login"/>;
             }
-            window.history.replaceState(null, '');
-        }
-
-        if(typeof this.props.location.state !== 'undefined'){
-            if (this.props.location.state.resetData !== ""){
+            else if (typeof this.props.location.state.resetData !== 'undefined'){
                 toastMessage =
                 {
                     title: 'Success',
@@ -116,11 +108,7 @@ class Login extends Component{
                 };
                 toaster = <Toast toast={toastMessage} page="login"/>;
             }
-            window.history.replaceState(null, '');
-        }
-
-        if(typeof this.props.location.state !== 'undefined'){
-            if (this.props.location.state.savePasswordMessage !== ""){
+            else if (typeof this.props.location.state.savePasswordMessage !== 'undefined'){
                 toastMessage =
                 {
                     title: 'Success',
